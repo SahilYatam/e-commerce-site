@@ -8,10 +8,13 @@ const userSchema = new mongoose.Schema({
 
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true,
+        lowercase: true,
+        trim: true
     },
 
-    hashPassword: {
+    password: {
         type: String,
         required: true
     },
@@ -22,13 +25,8 @@ const userSchema = new mongoose.Schema({
         default: "buyer"
     },
 
-    shopName: {
-        type: String
-    },
-
-    shopAddress: {
-        type: String
-    }
+    shopName: String,
+    shopAddress: String
 
 }, {timestamps: true});
 
