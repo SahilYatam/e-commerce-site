@@ -34,9 +34,41 @@ const getAllProducts = asyncHandler(async(req, res) => {
     return res.status(200).json(new ApiResponse(200, {products}, message, meta));
 });
 
+const getProductById = asyncHandler(async(req, res) => {
+    const id = req.params.id;
+    const product = await productService.getProductById(id)
+
+    return res.status(200).json(new ApiResponse(200, {product}, "Product details fetched successfully"));
+})
+
+const getProductsByCategory = asyncHandler(async(req, res) => {
+    const category = req.query.catergory;
+    const {products, page, limit, total} = await productService.getProductsByCategory(category)
+
+    const meta = {page, limit, total};
+
+    return res.status(200).json(new ApiResponse(200, {products}, "Products successfully fetched for the selected category", meta));
+})
+
+const searchProductsWithCategory = asyncHandler(async(req, res) => {
+    const productName = req.query.productName;
+
+    const {searchResults, relatedCategoryResults, meta} = await productService.searchProductsWithCategory(productName)
+
+    const results = {searchResults, relatedCategoryResults}
+
+    const message = searchResults.length === 0 ? "No products found matching your search" : "Products matching search retrieved successfully";
+
+    return res.status(200).json(new ApiResponse(200, {results}, message, meta));
+})
+
+
 export const productController = {
     addProduct,
     deleteProduct,
     updateProduct,
-    getAllProducts
+    getAllProducts,
+    getProductById,
+    getProductsByCategory,
+    searchProductsWithCategory
 }
