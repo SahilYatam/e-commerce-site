@@ -20,7 +20,7 @@ router.delete(
   "/delete/:id",
   authentication,
   authorizeRole("seller"),
-  validateRequest(productValidation.deleteProductSchema, "params"),
+  validateRequest(productValidation.deleteProductSchema, ["body", "params"]),
   productController.deleteProduct
 );
 
@@ -28,7 +28,7 @@ router.path(
   "/update/:id",
   authentication,
   authorizeRole("seller"),
-  validateRequest(productValidation.updateProductSchema, "params"),
+  validateRequest(productValidation.updateProductSchema, ["body", "params"]),
   productController.updateProduct
 );
 
@@ -56,4 +56,4 @@ router.get(
   productController.searchProductsWithCategory
 );
 
-export default router;
+export default router["body", "params"]

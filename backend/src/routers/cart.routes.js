@@ -10,21 +10,21 @@ const router = Router();
 router.post(
   "/add/:id",
   authentication,
-  validateRequest(cartValidator.addToCartSchema, "params"),
+  validateRequest(cartValidator.addToCartSchema, ["body", "params"]),
   cartController.addToCart
 );
 
 router.delete(
   "/decrease-quantity/:id",
   authentication,
-  validateRequest(cartValidator.decreaseQuantitySchema, "params"),
+  validateRequest(cartValidator.decreaseQuantitySchema, ["body", "params"]),
   cartController.decreaseQuantity
 );
 
 router.delete(
   "/delete/:id",
   authentication,
-  validateRequest(cartValidator.removeFromCartSchema, "params"),
+  validateRequest(cartValidator.removeFromCartSchema, ["body", "params"]),
   cartController.removeFromcart
 );
 

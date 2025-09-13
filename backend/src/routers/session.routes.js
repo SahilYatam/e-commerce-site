@@ -8,6 +8,11 @@ import { authentication } from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-router.post("/refresh-access-token", authentication, validateRequest(refreshAccessTokenSchema, "cookies"), handleRefreshAccessToken)
+router.post(
+  "/refresh-access-token",
+  authentication,
+  validateRequest(refreshAccessTokenSchema, "cookies"),
+  handleRefreshAccessToken
+);
 
 export default router;

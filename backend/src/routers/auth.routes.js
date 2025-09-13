@@ -9,8 +9,8 @@ import { authentication } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.post(
-  "/singup",
-  validateRequest(authValidate.singupSchema),
+  "/signup",
+  validateRequest(authValidate.signupSchema),
   authController.signup
 );
 
@@ -40,6 +40,18 @@ router.post(
   validateRequest(authValidate.changeNameSchema),
   authController.changeUserName
 );
+
+router.post(
+    "/forget-password",
+    validateRequest(authValidate.forgetPasswordSchema),
+    authController.forgetPasswordRequest
+);
+
+router.post(
+    "/reset-password/:token",
+    validateRequest(authValidate.resetPasswordSchema, ["body", "params"]),
+    authController.resetPassword
+)
 
 router.get("/user", authentication, authController.getUser);
 

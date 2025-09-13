@@ -12,14 +12,14 @@ const router = Router();
 router.post(
   "/purchase/:id",
   authentication,
-  validateRequest(orderValidator.buyProductSchema, "params"),
+  validateRequest(orderValidator.buyProductSchema, ["body", "params"]),
   orderController.buyProduct
 );
 
 router.patch(
   "/cancel-order/:id",
   authentication,
-  validateRequest(orderValidator.cancelOrderSchema, "params"),
+  validateRequest(orderValidator.cancelOrderSchema, ["body", "params"]),
   orderController.cancelOrder
 );
 
@@ -34,6 +34,6 @@ router.delete(
   "/delete-order/:id",
   authentication,
   authorizeRole("seller"),
-  validateRequest(orderValidator.removeOrderSchema, "params"),
+  validateRequest(orderValidator.removeOrderSchema, ["body", "params"]),
   orderController.removeOrder
 );
