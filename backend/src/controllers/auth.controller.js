@@ -1,10 +1,13 @@
 import { asyncHandler } from "../utils/handlers/asyncHandler.js"
 import { ApiResponse } from "../utils/responses/ApiResponse.js"
+import logger from "../utils/logger/logger.js";
 
 import { setCookies, clearCookies } from "../utils/handlers/cookies.js";
 
 import { authService } from "../services/auth.service.js"
 import { createSession } from "../services/session.service.js";
+
+import { sendPasswordResetEmail, sendPasswResetSuccessEmail } from "../services/email.service.js";
 
 const signup = asyncHandler(async(req, res) => {
     const user = await authService.signup(req.body);
@@ -58,7 +61,26 @@ const changeUserName = asyncHandler(async(req, res) => {
     return res.status(200).json(new ApiResponse(200, {userName}, "Named changed successfully"));
 })
 
+const forgetPasswordRequest = asyncHandler(async(req, res) => {
+    const user = await authService.forgetPasswordRequest(req.body);
+    const resetLink = `${process.env.CLIENT_URL}/forget-password/${user.token}`;
 
+    await sendPasswordResetEmail(user.email, resetLink);
+
+    logger.info("Password reset link generated from this Id: ", { userId: user.userId });
+
+    return res.status(200).json(new ApiResponse(200, {}, "Password reset email send successfully"));
+})
+
+const resetPassword = asyncHandler(async(req, res) => {
+    const token = req.params.token;
+
+    const user = await authService.resetPassword(token, req.body);
+    await sendPasswResetSuccessEmail(user.email);
+
+    logger.info("Password reset successful from this Id: ", { userId: user.userId });
+    return res.status(200).json(new ApiResponse(200, {}, "Password reset successfull"));
+})
 
 export const authController = {
     signup,
@@ -66,5 +88,7 @@ export const authController = {
     logout,
     getUser,
     changePassword,
-    changeUserName
+    changeUserName,
+    forgetPasswordRequest,
+    resetPassword
 }
