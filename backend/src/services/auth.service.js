@@ -4,7 +4,7 @@ import { Session } from "../models/session.model.js"
 import { ApiError } from "../utils/responses/ApiError.js"
 
 import { hashPassword, comparePassword } from "../utils/security/password.utils.js";
-import { hashToken } from "../utils/security/token.utils.js";
+import { generateToken, hashToken } from "../utils/security/token.utils.js";
 
 const toPublicUser = (user) => ({
     id: user._id,
@@ -92,11 +92,48 @@ const changeUserName = async (id, data) => {
     return {userName: user.name}
 }
 
+const forgetPasswordRequest = async (data) => {
+    const email = data.email.toLowerCase().trim();
+    const user = await User.findOne({email});
+
+    if(!user) throw new ApiError(404, "User with this email does not exist");
+
+    const rawToken = generateToken();
+    const resetTokenExpiresAt = new Date(Date.now() + 10 * 60 * 1000);
+
+    const hashedToken = hashToken(rawToken)
+
+    user.resetPasswordToken = hashedToken;
+    user.resetPasswordExpiresAt = resetTokenExpiresAt;
+
+    await user.save();
+
+    return {email: user.email, token: rawToken, userId: user._id}
+}
+
+const resetPassword = async(token, password) => {
+    const hashedToken = hashToken(token)
+    const user = await User.findOne({resetPasswordToken: hashedToken})
+
+    if(!user || user.resetPasswordExpiresAt.getTime()  < Date.now()) {
+        throw new ApiError(403, "Invalid or Expired reset token");
+    }
+
+    const newPassword = await hashPassword(password)
+    user.password = newPassword;
+
+    await user.save();
+
+    return {email: user.email, userId: user._id};
+}
+
 export const authService = {
     signup,
     login,
     logout,
     getUser,
     changePassword,
-    changeUserName
+    changeUserName,
+    forgetPasswordRequest,
+    resetPassword
 }
