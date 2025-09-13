@@ -1,6 +1,6 @@
 import Joi from "joi"
 
-const singupSchema = Joi.object({
+const signupSchema = Joi.object({
     email: Joi.string().email({tlds: {allow: false}}).trim().lowercase().required().messages({
         "any.required": "Email is required",
         "string.email": "Email must be a valid email address",
@@ -89,10 +89,35 @@ const changeNameSchema = Joi.object({
     }),
 });
 
+const forgetPasswordSchema = Joi.object({
+  email: Joi.string()
+    .email({ tlds: { allow: false } }) // disables TLD restriction like `.com` only
+    .trim()
+    .lowercase()
+    .required()
+    .messages({
+      "string.email": "Please enter a valid email address.",
+      "any.required": "Email is required.",
+    }),
+});
+
+const resetPasswordSchema = Joi.object({
+    password: Joi.string().pattern(new RegExp(
+        "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,30}$"
+    )).required()
+    .messages({
+      "string.pattern.base":
+        "Password must be 8–30 characters, include uppercase, lowercase, number, and special character.",
+      "any.required": "Password is required.",
+    }),
+});
+
 export const authValidate = {
-    singupSchema,
+    signupSchema,
     loginSchema,
     logoutSchema,
     changePasswordSchema,
-    changeNameSchema
+    changeNameSchema,
+    forgetPasswordSchema,
+    resetPasswordSchema
 }
