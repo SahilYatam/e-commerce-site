@@ -1,4 +1,4 @@
-import { Router } from "express";
+import Router from "express";
 
 import { orderController } from "../controllers/order.controller.js";
 import { orderValidator } from "../validators/order.validator.js";
@@ -37,3 +37,5 @@ router.delete(
   validateRequest(orderValidator.removeOrderSchema, ["body", "params"]),
   orderController.removeOrder
 );
+
+export default router;

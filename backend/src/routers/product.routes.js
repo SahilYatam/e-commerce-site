@@ -56,4 +56,4 @@ router.get(
   productController.searchProductsWithCategory
 );
 
-export default router["body", "params"]
+export default router;

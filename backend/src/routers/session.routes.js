@@ -1,4 +1,4 @@
-import { Router } from "express";
+import Router from "express";
 
 import { handleRefreshAccessToken } from "../controllers/session.controller.js";
 import { refreshAccessTokenSchema } from "../validators/session.validator.js";
