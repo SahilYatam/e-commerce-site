@@ -1,4 +1,5 @@
 import {createLogger, format, transports} from "winston";
+import LokiTransport from "winston-loki"
 import DailyRotateFile from "winston-daily-rotate-file";
 
 const logFormat = format.combine(
@@ -44,7 +45,11 @@ const logger = createLogger({
             maxSize: "5m",
             maxFiles: "30d",
             auditFile: 'logs/error-audit.json' // Track log file rotations
-        })
+        }),
+
+        new LokiTransport({
+            host: "http://127.0.0.1:3100"
+        }),
     ],
 
     exceptionHandlers:[
