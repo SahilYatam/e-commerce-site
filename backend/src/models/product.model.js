@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
     sellerId: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true
     },
@@ -10,6 +10,8 @@ const productSchema = new mongoose.Schema({
     productName: {
         type: String,
         required: true,
+        lowercase: true,
+        trim: true
     },
 
     productImage: {
@@ -25,6 +27,20 @@ const productSchema = new mongoose.Schema({
     description: {
         type: String,
         required: true,
+    },
+
+    category: {
+        type: String,
+        enum: [
+            "Electronics",
+            "Clothing",
+            "Home & Kitchen",
+            "Books",
+            "Beauty & Personal Care",
+            "Sports & Outdoors",
+            "Other"
+        ],
+        default: "Other"
     }
 
 }, {timestamps: true});

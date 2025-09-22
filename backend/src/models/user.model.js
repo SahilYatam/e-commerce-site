@@ -25,8 +25,14 @@ const userSchema = new mongoose.Schema({
         default: "buyer"
     },
 
-    shopName: String,
-    shopAddress: String
+    resetPasswordToken: {
+        type: String,
+        unique: true
+    },
+
+    resetPasswordExpiresAt: {
+        type: Date,
+    },
 
 }, {timestamps: true});
 
