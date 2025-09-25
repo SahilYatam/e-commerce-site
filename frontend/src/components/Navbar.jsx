@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { IoIosMenu, IoMdClose } from "react-icons/io";
 import { AiOutlineHome, AiOutlineShoppingCart } from "react-icons/ai";
 import { BsBoxSeam } from "react-icons/bs";
+import { IoSearchOutline } from "react-icons/io5";
 
 const Navbar = () => {
     const [isMenuOpen, setisMenuOpen] = useState(false);
     const [isLogin, setIsLogin] = useState(false); // Start with user not logged in
+    const [searchValue, setSearchValue] = useState(""); // Track search input value
 
     const handleAuthClick = () => setIsLogin(isLogin); // Toggle login state
 
@@ -28,13 +30,21 @@ const Navbar = () => {
                     </header>
 
                     {/* Search */}
-                    <div className="hidden md:block w-80">
+                    <div className="w-60 md:w-80 relative">
+                        <IoSearchOutline className="h-6 w-6 text-gray-700 absolute left-3 top-1/2 transform -translate-y-1/2"/>
                         <input
                             type="text"
                             placeholder="Search Products"
-                            className="w-full rounded-3xl px-4 py-2 border border-gray-300
+                            value={searchValue}
+                            onChange={(e) => setSearchValue(e.target.value)}
+                            className="w-full rounded-3xl pl-12 pr-12 py-2 border border-gray-300
                        outline-none focus:outline-[2px] focus:outline-black focus:outline-offset-0"
                         />
+                        {searchValue && (
+                            <IoMdClose
+                                onClick={() => setSearchValue("")}
+                                className="h-5 w-5 text-gray-500 absolute right-3 top-1/2 transform -translate-y-1/2 cursor-pointer hover:text-gray-700"/>
+                        )}
                     </div>
 
                     {/* Desktop Links */}
@@ -81,7 +91,7 @@ const Navbar = () => {
                     <button className="flex items-center w-full text-left px-2 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition-colors">
                         <BsBoxSeam className="h-5 w-5 text-gray-700" />
                     </button>
-                    
+
                     <div className="flex justify-start">
                         <AuthButton />
                     </div>
