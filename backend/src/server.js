@@ -1,6 +1,6 @@
 import { app } from "./app.js";
-import logger from "./utils/logger.js";
-import { connectDB } from "./db/db.js";
+import logger from "./utils/logger/logger.js";
+import { connectDB } from "./config/db.js";
 import mongoose from "mongoose"
 
 import dotenv from "dotenv";

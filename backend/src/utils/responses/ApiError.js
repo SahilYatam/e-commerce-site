@@ -1,7 +1,7 @@
 export class ApiError extends Error{
     constructor(statusCode, message="Internal Server Error", errors = [], stack = ""){
         super(message);
-        this.status = statusCode;
+        this.statusCode = statusCode;
         this.error = errors;
 
         this.success = false;

@@ -23,8 +23,8 @@ export const authentication = async(req, res, next) => {
 
         if (!userId) {
             logger.error("❌ Token payload missing user identifier", {
-            payload: decoded,
-            availableKeys: Object.keys(decoded)
+                payload: decoded,
+                availableKeys: Object.keys(decoded)
             })
             throw new ApiError(401, "Invalid token payload - missing user identifier");
         }   

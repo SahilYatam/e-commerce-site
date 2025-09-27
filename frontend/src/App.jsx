@@ -1,10 +1,15 @@
+// import Navbar from "./components/Navbar.jsx"
+import SignupPage from "./pages/auth/SignupPage.jsx"
+import LoginPage from "./pages/auth/LoginPage.jsx"
 
 function App() {
 
   return (
-    <>
-      <h1 className="bg-blue-400 text-white text-4xl text-center">Hello World</h1>
-    </>
+    <div className="min-h-screen max-w-full bg-zinc-300 text-black" >
+        {/* <Navbar/> */}
+        {/* <SignupPage/> */}
+        <LoginPage/>
+    </div>
   )
 }
 

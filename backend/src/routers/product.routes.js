@@ -6,6 +6,8 @@ import { authentication } from "../middlewares/auth.middleware.js";
 import { authorizeRole } from "../middlewares/auth.middleware.js";
 import { validateRequest } from "../middlewares/joiValidation.middleware.js";
 
+import { uploadSingleImage } from "../middlewares/multer.middleware.js";
+
 const router = Router();
 
 router.post(
@@ -13,6 +15,7 @@ router.post(
   authentication,
   authorizeRole("seller"),
   validateRequest(productValidation.addProductSchema),
+  uploadSingleImage,
   productController.addProduct
 );
 
