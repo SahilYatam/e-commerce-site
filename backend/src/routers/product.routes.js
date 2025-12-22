@@ -11,52 +11,52 @@ import { uploadSingleImage } from "../middlewares/multer.middleware.js";
 const router = Router();
 
 router.post(
-  "/add-products",
-  authentication,
-  authorizeRole("seller"),
-  validateRequest(productValidation.addProductSchema),
-  uploadSingleImage,
-  productController.addProduct
+    "/add-products",
+    authentication,
+    authorizeRole("seller"),
+    uploadSingleImage,
+    // validateRequest(productValidation.addProductSchema),
+    productController.addProduct
 );
 
 router.delete(
-  "/delete/:id",
-  authentication,
-  authorizeRole("seller"),
-  validateRequest(productValidation.deleteProductSchema, ["body", "params"]),
-  productController.deleteProduct
+    "/delete/:id",
+    authentication,
+    authorizeRole("seller"),
+    validateRequest(productValidation.deleteProductSchema, ["body", "params"]),
+    productController.deleteProduct
 );
 
-router.path(
-  "/update/:id",
-  authentication,
-  authorizeRole("seller"),
-  validateRequest(productValidation.updateProductSchema, ["body", "params"]),
-  productController.updateProduct
-);
-
-router.get(
-  "/all-products",
-  validateRequest(productValidation.getAllProductsSchema),
-  productController.getAllProducts
+router.patch(
+    "/update/:id",
+    authentication,
+    authorizeRole("seller"),
+    validateRequest(productValidation.updateProductSchema, ["body", "params"]),
+    productController.updateProduct
 );
 
 router.get(
-  "/:id",
-  validateRequest(productValidation.getProductByIdSchema),
-  productController.getProductById
+    "/all-products",
+    validateRequest(productValidation.getAllProductsSchema),
+    productController.getAllProducts
 );
 
 router.get(
-  "/product-category",
-  validateRequest(productValidation.getProductsByCategorySchema),
-  productController.getProductsByCategory
+    "/product-category",
+    validateRequest(productValidation.getProductsByCategorySchema, "query"),
+    productController.getProductsByCategory
 );
 
 router.get(
-  "/search",
-  validateRequest(productValidation.searchProductsWithCategorySchema),
-  productController.searchProductsWithCategory
+    "/search",
+    validateRequest(productValidation.searchProductSchema, "query"),
+    productController.searchProducts
+);
+
+router.get(
+    "/:id",
+    validateRequest(productValidation.getProductByIdSchema, "params"),
+    productController.getProductById
 );
 
 export default router;

@@ -16,12 +16,17 @@ const productSchema = new mongoose.Schema({
 
     productImage: {
         type: String,
-        required: true,
     },
 
     price: {
-        type: String,
+        type: Number,
         required: true,
+    },
+
+    stock: {
+        type: Number,
+        default: 1,
+        min: 1,
     },
 
     description: {
@@ -31,18 +36,19 @@ const productSchema = new mongoose.Schema({
 
     category: {
         type: String,
+        lowercase: true,
         enum: [
-            "Electronics",
-            "Clothing",
-            "Home & Kitchen",
-            "Books",
-            "Beauty & Personal Care",
-            "Sports & Outdoors",
-            "Other"
+            "electronics",
+            "clothing",
+            "home & kitchen",
+            "books",
+            "beauty & personal care",
+            "sports & outdoors",
+            "other"
         ],
-        default: "Other"
+        default: "other"
     }
 
-}, {timestamps: true});
+}, { timestamps: true });
 
 export const Product = mongoose.model("Product", productSchema);

@@ -7,7 +7,7 @@ import { hashPassword, comparePassword } from "../utils/security/password.utils.
 import { generateToken, hashToken } from "../utils/security/token.utils.js";
 
 const toPublicUser = (user) => ({
-    id: user._id,
+    id: user._id.toString(),
     name: user.name,
     email: user.email,
     role: user.role || "buyer"
@@ -29,7 +29,12 @@ const signup = async (data) => {
 
     await user.save();
 
-    return toPublicUser(user)
+    return {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+    }
 }
 
 const login = async (data) => {
@@ -42,7 +47,12 @@ const login = async (data) => {
 
     if(!isPasswordValid) throw new ApiError(401, "Password is incorrect");
 
-    return toPublicUser(user);
+    return {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+    }
 }
 
 const logout = async (refreshToken) => {
@@ -59,37 +69,6 @@ const getUser = async(id) => {
     if(!user) throw new ApiError(404, "User not found");
 
     return toPublicUser(user)
-}
-
-const changePassword = async(id, data) => {
-    const user = await User.findById(id)
-    if(!user) throw new ApiError(404, "User not found");
-
-    const isPasswordValid = await comparePassword(data.oldPassword, user.password)
-    if(!isPasswordValid) throw new ApiError(401, "Password is incorrect");
-
-    if(data.newPassword !== data.confirmPassword) {
-        throw new ApiError(401, "Password does not match with confirm password");
-    }
-
-    const newPassword = await hashPassword(data.newPassword)
-
-    user.password = newPassword;
-
-    await user.save();
-
-    return {message: "Password changed successfully"};
-}
-
-const changeUserName = async (id, data) => {
-    const user = await User.findById(id)
-    if(!user) throw new ApiError(404, "User not found");
-
-    user.name = data.name;
-
-    await user.save();
-
-    return {userName: user.name}
 }
 
 const forgetPasswordRequest = async (data) => {
@@ -132,8 +111,6 @@ export const authService = {
     login,
     logout,
     getUser,
-    changePassword,
-    changeUserName,
     forgetPasswordRequest,
     resetPassword
 }

@@ -13,13 +13,14 @@ export const authentication = async(req, res, next) => {
         : null;
 
         const accessToken = req.cookies.accessToken || tokenFromHeader;
+        
         if (!accessToken)
             throw new ApiError(401, "Unauthorized - No access token provided");
 
         const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN)
         if(!decoded) throw new ApiError(403, "Invalid request");
 
-        const userId = decoded.userId || decoded.id || decoded.sub;
+        let userId = decoded.userId || decoded.id || decoded.sub;
 
         if (!userId) {
             logger.error("❌ Token payload missing user identifier", {
@@ -27,7 +28,7 @@ export const authentication = async(req, res, next) => {
                 availableKeys: Object.keys(decoded)
             })
             throw new ApiError(401, "Invalid token payload - missing user identifier");
-        }   
+        }
 
         const user = await User.findById(userId)
         if (!user) {
@@ -78,7 +79,7 @@ export const authentication = async(req, res, next) => {
 
 export const authorizeRole = (...role) => {
     return (req, res, next) => {
-        if(!role.includes(req.user.role) || role !== "seller") {
+        if(!role.includes(req.user.role)) {
             throw new ApiError(403, "Forbidden: Access denied");
         }
         next()

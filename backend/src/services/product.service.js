@@ -1,18 +1,22 @@
 import { Product } from "../models/product.model.js"
+import { User } from "../models/user.model.js";
 
 import { ApiError } from "../utils/responses/ApiError.js"
 
-const addProduct = async(sellerId, data) => {
-    const seller = await Product.findById(sellerId);
+const addProduct = async(sellerId, imageUrl, data) => {
+    const seller = await User.findById(sellerId.toString());
     if(!seller) throw new ApiError(404, "Seller not found");
+
+    const {productName, price, description, category, stock} = data
 
     const product = new Product({
         sellerId: seller._id,
-        productName: data.productName,
-        productImage: data.productImage,
-        price: data.price,
-        description: data.description,
-        category: data?.category
+        productImage: imageUrl,
+        productName,
+        price: Number(price),
+        description,
+        category,
+        stock
     });
 
     await product.save();
@@ -24,21 +28,19 @@ const deleteProduct = async(productId) => {
     const product = await Product.findByIdAndDelete(productId)
     if(!product) throw new ApiError(404, "Product not found");
     
-    return {deletedProduct: product};
+    return {message: "Product deleted successfully"};
 }
 
 const updateProduct = async(productId, data) => {
     const allowedFields = ["productName", "price", "description", "category"]
     let updates = {}
 
-    // collect only allowed + provided fields
     for(let key of allowedFields){
         if(key in data) {
             updates[key] = data[key]
         }
     }
 
-    // if no valid updates, return message
     if(Object.keys(updates).length === 0){
         return {message: "No fields provided for update."};
     }
@@ -99,6 +101,9 @@ const searchProducts = async(productName) => {
 }
 
 const searchProductsWithCategory = async (productName) => {
+    if (!productName || productName.trim() === "") {
+        throw new ApiError(400, "Search query cannot be empty");
+    }
     // get search results
     const {searchResults, page, limit, totalSearch} = await searchProducts(productName);
 
@@ -130,5 +135,6 @@ export const productService = {
     getAllProducts,
     getProductById,
     getProductsByCategory,
+    searchProducts,
     searchProductsWithCategory
 }

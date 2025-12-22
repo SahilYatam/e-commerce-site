@@ -10,32 +10,65 @@ import { authorizeRole } from "../middlewares/auth.middleware.js";
 const router = Router();
 
 router.post(
-  "/purchase/:id",
-  authentication,
-  validateRequest(orderValidator.buyProductSchema, ["body", "params"]),
-  orderController.buyProduct
+    "/buy-now/:id",
+    authentication,
+    validateRequest(orderValidator.buyProductSchema, ["body", "params"]),
+    orderController.buyNow
+);
+
+router.post(
+    "/checkout",
+    authentication,
+    orderController.checkoutCart
+)
+
+router.patch(
+    "/confirm-order/:id",
+    authentication,
+    authorizeRole("seller"),
+    orderController.confirmOrder
 );
 
 router.patch(
-  "/cancel-order/:id",
-  authentication,
-  validateRequest(orderValidator.cancelOrderSchema, ["body", "params"]),
-  orderController.cancelOrder
+    "/reject-order/:id",
+    authentication,
+    authorizeRole("seller"),
+    orderController.rejectOrder
+);
+
+router.patch(
+    "/cancel-order/:id",
+    authentication,
+    validateRequest(orderValidator.cancelOrderSchema, ["body", "params"]),
+    orderController.cancelOrder
+);
+
+router.patch(
+    "/hide-order/:id",
+    authentication,
+    validateRequest(orderValidator.hideOrderSchema, ["body", "params"]),
+    orderController.hideOrder
 );
 
 router.get(
-  "/orders",
-  authentication,
-  authorizeRole("seller"),
-  orderController.getOrders
+    "/user-orders",
+    authentication,
+    orderController.getAllOrdersForUser
+);
+
+router.get(
+    "/orders",
+    authentication,
+    authorizeRole("seller"),
+    orderController.getOrders
 );
 
 router.delete(
-  "/delete-order/:id",
-  authentication,
-  authorizeRole("seller"),
-  validateRequest(orderValidator.removeOrderSchema, ["body", "params"]),
-  orderController.removeOrder
+    "/delete-order/:id",
+    authentication,
+    authorizeRole("seller"),
+    validateRequest(orderValidator.removeOrderSchema, ["body", "params"]),
+    orderController.removeOrder
 );
 
 export default router;

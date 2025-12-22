@@ -28,10 +28,12 @@ const quantityField = Joi.number().integer().min(1).default(1).messages({
 
 const buyProductSchema = Joi.object({ userId: userIdField, productId: productIdField, quantity: quantityField });
 const cancelOrderSchema = Joi.object({ userId: userIdField, productId: productIdField });
+const hideOrderSchema = Joi.object({ userId: userIdField, productId: productIdField });
 const removeOrderSchema = Joi.object({ orderId: orderIdField });
 
 export const orderValidator = {
     buyProductSchema,
+    hideOrderSchema,
     cancelOrderSchema,
     removeOrderSchema
 }

@@ -2,43 +2,102 @@ import { asyncHandler } from "../utils/handlers/asyncHandler.js"
 import { ApiResponse } from "../utils/responses/ApiResponse.js"
 
 import { orderService } from "../services/order.service.js"
+import { ApiError } from "../utils/responses/ApiError.js";
 
-const buyProduct = asyncHandler(async(req, res) => {
-    const userId = req.user?.id;
+const buyNow = asyncHandler(async (req, res) => {
+    const userId = req.user?._id;
+    if (!userId) throw new ApiError(401, "Login to purchase items");
+
+    const { quantity, deliveryAddress } = req.body;
+
     const productId = req.params.id;
-    const orderdItem = await orderService.buyProduct(userId, productId)
+    const order = await orderService.buyNow(userId, productId, quantity, deliveryAddress)
 
-    return res.status(200).json(new ApiResponse(200, {orderdItem}, "Order placed successfully"));
+    return res.status(201).json(new ApiResponse(201, { order }, "Order placed successfully"));
 });
 
-const cancelOrder = asyncHandler(async(req, res) => {
-    const userId = req.user?.id;
-    const productId = req.params.id;
-    const canceledOrder = await orderService.cancelOrder(userId, productId)
+const checkoutCart = asyncHandler(async(req, res) => {
+    const userId = req.user._id;
+    const {deliveryAddress} = req.body;
 
-    return res.status(200).json(new ApiResponse(200, {canceledOrder}, "Order canceled successfully"));
+    const order = await orderService.createOrderFromCart(userId, deliveryAddress)
+
+    return res.status(201).json(
+        new ApiResponse(201, { order }, "Order placed successfully from cart")
+    );
+})
+
+const cancelOrder = asyncHandler(async (req, res) => {
+    const userId = req.user?._id;
+    const orderId = req.params.id;
+    const order = await orderService.cancelOrder(userId, orderId)
+
+    return res.status(200).json(new ApiResponse(200, { order }, "Order canceled successfully"));
 });
 
-const getOrders = asyncHandler(async(req, res) => {
-    const order = await orderService.getOrders();
-    if(!order || order.length === 0) {
+const hideOrder = asyncHandler(async (req, res) => {
+    const userId = req.user?._id;
+    const orderId = req.params.id;
+    await orderService.hideOrder(userId, orderId);
+
+    return res.status(200).json(new ApiResponse(200, {}, "Order removed from your list"));
+})
+
+const getAllOrdersForUser = asyncHandler(async (req, res) => {
+    const userId = req.user?._id
+    if (!userId) throw new ApiError(404, "User not exist");
+
+    const orders = await orderService.getAllOrdersForUser(userId)
+
+    if (!orders || orders.length === 0) {
         return res.status(200)
-        .json(new ApiResponse(200, [], "No orders found"));
+            .json(new ApiResponse(200, [], "No orders have been placed yet."));
     }
 
-    return res.status(200).json(new ApiResponse(200, {order}, "Orders fetched successfully"));
+    return res.status(200).json(new ApiResponse(200, { orders }, "Orders fetched successfully"));
+})
+
+const getOrders = asyncHandler(async (req, res) => {
+    const orders = await orderService.getOrders();
+    if (!orders || orders.length === 0) {
+        return res.status(200)
+            .json(new ApiResponse(200, [], "No orders found"));
+    }
+
+    return res.status(200).json(new ApiResponse(200, { orders }, "Orders fetched successfully"));
 });
 
-const removeOrder = asyncHandler(async(req, res) => {
+const confirmOrder = asyncHandler(async(req, res) => {
+    const orderId = req.params.id;
+
+    const order = await orderService.confirmOrder(orderId);
+
+    return res.status(200).json(new ApiResponse(200, { order }, "Order confirmed"));
+})
+
+const rejectOrder = asyncHandler(async(req, res) => {
+    const orderId = req.params.id;
+
+    const order = await orderService.rejectOrder(orderId);
+
+    return res.status(200).json(new ApiResponse(200, { order }, "Order rejected"));
+})
+
+const removeOrder = asyncHandler(async (req, res) => {
     const orderId = req.params.id;
     const removedOrder = await orderService.removeOrder(orderId);
 
-    return res.status(200).json(new ApiResponse(200, {removedOrder}, "Order removed successfully"));
+    return res.status(200).json(new ApiResponse(200, { removedOrder }, "Order removed successfully"));
 });
 
 export const orderController = {
-    buyProduct,
+    buyNow,
+    checkoutCart,
     cancelOrder,
+    hideOrder,
+    getAllOrdersForUser,
     getOrders,
+    confirmOrder,
+    rejectOrder,
     removeOrder
 }

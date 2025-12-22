@@ -25,9 +25,10 @@ const userSchema = new mongoose.Schema({
         default: "buyer"
     },
 
+    lastUsedAddress: { type: String, default: '' },
+
     resetPasswordToken: {
         type: String,
-        unique: true
     },
 
     resetPasswordExpiresAt: {

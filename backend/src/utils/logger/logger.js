@@ -2,6 +2,11 @@ import {createLogger, format, transports} from "winston";
 import LokiTransport from "winston-loki"
 import DailyRotateFile from "winston-daily-rotate-file";
 
+import fs from 'fs';
+if(!fs.existsSync('logs')){
+    fs.mkdirSync('logs', {recursive: true});
+}
+
 const logFormat = format.combine(
     format.timestamp({
         format: 'YYYY-MM-DD HH:mm:ss:SSS' // More precise timestamp with milliseconds
@@ -60,9 +65,5 @@ const logger = createLogger({
     ]
 });
 
-import fs from 'fs';
-if(!fs.existsSync('logs')){
-    fs.mkdirSync('logs', {recursive: true});
-}
 
 export default logger;

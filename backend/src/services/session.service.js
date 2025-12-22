@@ -6,16 +6,16 @@ import { generateAccessAndRefreshToken } from "../utils/security/generateAccessA
 import logger from "../utils/logger/logger.js"
 import { ApiError } from "../utils/responses/ApiError.js"
 
-export const createSession = async (user) => {
+export const createSession = async (userId) => {
     try {
-        const {accessToken, refreshToken: rawToken} = generateAccessAndRefreshToken(user)
+        const {accessToken, refreshToken: rawToken} = generateAccessAndRefreshToken(userId)
     
         const hashedToken = hashToken(rawToken)
     
         const expiresAt = tokenExpiresAt();
     
         const session = new Session({
-            userId: user.id,
+            userId,
             refreshToken: hashedToken,
             expiresAt
         });

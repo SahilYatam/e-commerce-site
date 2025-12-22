@@ -12,7 +12,7 @@ import { sendPasswordResetEmail, sendPasswResetSuccessEmail } from "../services/
 const signup = asyncHandler(async(req, res) => {
     const user = await authService.signup(req.body);
 
-    const {accessToken, refreshToken} = await createSession(user)
+    const {accessToken, refreshToken} = await createSession(user.id)
 
     setCookies(res, accessToken, refreshToken)
 
@@ -22,7 +22,7 @@ const signup = asyncHandler(async(req, res) => {
 const login = asyncHandler(async (req, res) => {
     const user = await authService.login(req.body);
 
-    const {accessToken, refreshToken} = await createSession(user)
+    const {accessToken, refreshToken} = await createSession(user.id)
 
     setCookies(res, accessToken, refreshToken)
 
@@ -44,22 +44,6 @@ const getUser = asyncHandler(async(req, res) => {
 
     return res.status(200).json(new ApiResponse(200, {user}, "User account fetched successfully"));
 });
-
-const changePassword = asyncHandler(async(req, res) => {
-    const id = req.user?._id
-
-    const result = await authService.changePassword(id, req.body)
-
-    return res.status(200).json(new ApiResponse(200, {result}, "Password changed successfully"));
-});
-
-const changeUserName = asyncHandler(async(req, res) => {
-    const id = req.user?._id
-
-    const {userName} = await authService.changeUserName(id, req.body)
-
-    return res.status(200).json(new ApiResponse(200, {userName}, "Named changed successfully"));
-})
 
 const forgetPasswordRequest = asyncHandler(async(req, res) => {
     const user = await authService.forgetPasswordRequest(req.body);
@@ -87,8 +71,6 @@ export const authController = {
     login,
     logout,
     getUser,
-    changePassword,
-    changeUserName,
     forgetPasswordRequest,
     resetPassword
 }

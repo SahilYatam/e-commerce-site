@@ -14,17 +14,17 @@ router.post(
   cartController.addToCart
 );
 
-router.delete(
-  "/decrease-quantity/:id",
+router.patch(
+  "/update-quantity/:id",
   authentication,
-  validateRequest(cartValidator.decreaseQuantitySchema, ["body", "params"]),
-  cartController.decreaseQuantity
+  validateRequest(cartValidator.updateCartQuantity, ["body", "params"]),
+  cartController.updateQuantity
 );
 
 router.delete(
   "/delete/:id",
   authentication,
-  validateRequest(cartValidator.removeFromCartSchema, ["body", "params"]),
+  validateRequest(cartValidator.removeFromCartSchema, "params"),
   cartController.removeFromcart
 );
 

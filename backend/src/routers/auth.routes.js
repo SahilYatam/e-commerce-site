@@ -23,22 +23,8 @@ router.post(
 router.post(
   "/logout",
   authentication,
-  validateRequest(authValidate.logoutSchema),
+  validateRequest(authValidate.logoutSchema, "cookies"),
   authController.logout
-);
-
-router.post(
-  "/change-password",
-  authentication,
-  validateRequest(authValidate.changePasswordSchema),
-  authController.changePassword
-);
-
-router.post(
-  "/change-name",
-  authentication,
-  validateRequest(authValidate.changeNameSchema),
-  authController.changeUserName
 );
 
 router.post(

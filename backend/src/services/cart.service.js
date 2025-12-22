@@ -1,11 +1,14 @@
 import { Cart } from "../models/cart.model.js"
+import { Product } from "../models/product.model.js";
 import { ApiError } from "../utils/responses/ApiError.js"
 
 const addToCart = async (userId, productId, quantity = 1) => {
-    if(quantity <= 0) throw new ApiError(400, "Quantity must be greater than 0");
 
-    const cartProduct = await Cart.findOne({userId, productId})
-    if(cartProduct){
+    if (quantity <= 0) throw new ApiError(400, "Quantity must be greater than 0");
+
+    const cartProduct = await Cart.findOne({ userId, productId });
+
+    if (cartProduct) {
         cartProduct.quantity += quantity;
 
         await cartProduct.save();
@@ -18,45 +21,70 @@ const addToCart = async (userId, productId, quantity = 1) => {
         quantity
     });
 
-    await newCartProduct.save()
+    await newCartProduct.save();
 
-    return newCartProduct
+    return newCartProduct;
 }
 
-const decreaseQuantity = async(userId, productId, quantity = 1) => {
-    if(quantity <= 0) throw new ApiError(400, "Quantity must be greater than 0");
+const updateCartQuantity = async (userId, productId, newQuantity) => {
+    if (newQuantity < 0) throw new ApiError(400, "Quantity cannot be negetive");
 
-    const cartProduct = await Cart.findOne({userId, productId})
-    if(!cartProduct) throw new ApiError(404, "Product not found in cart");
+    const cartProduct = await Cart.findOne({ userId, productId });
+    if (!cartProduct) throw new ApiError(404, "Product not found in cart");
 
-    if(cartProduct.quantity <= quantity){
-        // if user reduces more than available quantity then remove item completely
-        await Cart.findOneAndDelete({userId, productId});
-        return {message: "Product removed from cart"}
-    };
+    // IF new quantity is 0, remove from cart
+    if (newQuantity === 0) {
+        await Cart.findByIdAndDelete(cartProduct._id);
+        return { message: "Product removed from cart", removed: true };
+    }
 
-    cartProduct.quantity -= quantity;
+    // Checking stock availability
+    const product = await Product.findById(productId);
+    if (newQuantity > product.stock) {
+        throw new ApiError(400, `Only ${product.stock} items available in stock`);
+    }
+
+    cartProduct.quantity = newQuantity;
+
     await cartProduct.save();
+    await cartProduct.populate("productId")
 
     return cartProduct;
 }
 
-const removeFromcart = async(userId, productId) => {
-    const removedProduct = await Cart.findOneAndDelete({userId, productId});
-    if(!removedProduct) throw new ApiError(404, "Product not found in cart");
-        
-    return removedProduct
+
+const removeFromcart = async (userId, cartItemId) => {
+    const removedProduct = await Cart.findOneAndDelete({ userId, _id: cartItemId });
+
+    if (!removedProduct) throw new ApiError(404, "Product not found in cart");
+
+    return removedProduct;
 }
 
-const getCartItems = async(userId) => {
-    const cartItems = await Cart.findOne({userId}).
-        populate("productId", "productName price category productImage");
-    return cartItems
+const getCartItems = async (userId) => {
+    const cartItems = await Cart.find({ userId })
+        .populate({
+            path: "productId",
+            select: "productName productImage price category"
+        });
+
+    const cartWithTotals = cartItems.map(item => ({
+        ...item.toObject(),
+        itemTotal: item.productId.price * item.quantity
+    }));
+
+    const grandTotal = cartWithTotals.reduce(
+        (sum, item) => sum + item.itemTotal,
+        0
+    );
+
+    return { cartItems: cartWithTotals, grandTotal }
 }
+
 
 export const cartService = {
     addToCart,
-    decreaseQuantity,
+    updateCartQuantity,
     removeFromcart,
     getCartItems
 }
