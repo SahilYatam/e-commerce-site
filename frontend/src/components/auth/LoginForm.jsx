@@ -1,69 +1,88 @@
 import { useState } from "react";
-import AuthLayout from "./AuthLayout";
-import InputField from "./Input";
-import Button from "./Button";
+import AuthLayout from "../layout/AuthLayout";
+import InputField from "../common/Input";
+import Button from "../common/Button";
+import { Eye, EyeOff } from "lucide-react";
 
-const LoginForm = () => {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const [errors, setErrors] = useState({});
+import { Link } from "react-router-dom"
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    
-    setForm(prevForm => {
-      const newForm = { ...prevForm, [name]: value };
-      return newForm;
-    });
-  };
+const LoginForm = ({ onSubmit, loading = false }) => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [errors, setErrors] = useState({});
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+    const validateForm = ({ email, password }) => {
+        const newErrors = {};
+        if (!email?.trim()) {
+            newErrors.email = "Email is required";
+        } else if (!/^\S+@\S+\.\S+$/.test(email)) {
+            newErrors.email = "Email is invalid";
+        }
+        if (!password?.trim()) {
+            newErrors.password = "Password is required";
+        }
+        return newErrors;
+    };
 
-    // basic client side validation
-    const newErrors = {};
-    if (!form.email.includes("@")) newErrors.email = "Valid email required";
-    if (form.password.length < 8) newErrors.password = "Min 8 characters";
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const validationErrors = validateForm({ email, password });
+        setErrors(validationErrors);
+        if (Object.keys(validationErrors).length === 0) {
+            onSubmit({ email, password });
+        }
+    };
 
-    setErrors(newErrors);
 
-    if (Object.keys(newErrors).length === 0) {
-      // temprory console log
-      console.log("Signup payload:", form);
-    }
-  };
+    return (
+        <AuthLayout title="Login">
+            <form  onSubmit={handleSubmit}>
+                <InputField
+                    label="Email"
+                    type="email"
+                    name="email"
+                    value={email}
+                    onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (errors.email) setErrors({ ...errors, email: '' });
+                    }}
+                    error={errors.email}
+                />
+                <div className="relative">
+                    <InputField
+                        label="Password"
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={password}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            if (errors.password) setErrors({ ...errors, password: '' });
+                        }}
+                        error={errors.password}
+                    />
 
-  return (
-    <AuthLayout title="Login">
-      <div >
-        <InputField
-          label="Email"
-          type="email"
-          name="email"
-          value={form.email}
-          onChange={handleChange}
-          error={errors.email}
-        />
+                    <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute right-3 top-10 text-gray-400 hover:text-gray-300 transition-colors"
+                    >
+                        {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                    </button>
+                </div>
 
-        <InputField
-          label="Password"
-          type="password"
-          name="password"
-          value={form.password}
-          onChange={handleChange}
-          error={errors.password}
-        />
 
-        <Button type="submit" onSubmit={handleSubmit} className="mx-auto block">Log In</Button>
-      </div>
+                <Button type="submit" className="mx-auto block" disable={loading}>{loading ? "Logging in..." : "Log In"}</Button>
+            </form>
 
-      <p className="mt-4 text-center text-sm text-gray-600">
-        New here?{" "}
-        <a href="/signup" className="text-blue-600 hover:underline">
-          Create an account
-        </a>
-      </p>
-    </AuthLayout>
-  );
+            <p className="mt-4 text-center text-sm text-gray-600">
+                New here?{" "}
+                <Link to="/signup" className="text-blue-600 hover:underline">
+                    Create an account
+                </Link>
+            </p>
+        </AuthLayout>
+    );
 };
 
 export default LoginForm;
