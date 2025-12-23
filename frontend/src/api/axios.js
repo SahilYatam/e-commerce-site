@@ -2,7 +2,7 @@ import Axios from "axios";
 
 const axios = Axios.create({
     // baseURL: "http://localhost:8000/api/v1",
-    baseURL: "https://e-commerce-site-otow.onrender.com",
+    baseURL: "https://e-commerce-site-otow.onrender.com/api/v1",
     withCredentials: true
 });
 
