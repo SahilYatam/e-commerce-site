@@ -24,7 +24,8 @@ const app = express();
 
 app.use(helmet());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "https://e-commerce-site-nine-eta.vercel.app",
+    // origin: "http://localhost:5173",
     credentials: true
 }));
 app.use(morgan("dev"));
