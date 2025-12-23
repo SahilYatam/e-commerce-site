@@ -3,9 +3,6 @@ import logger from "./utils/logger/logger.js";
 import { connectDB } from "./config/db.js";
 import mongoose from "mongoose"
 
-import dotenv from "dotenv";
-dotenv.config();
-
 let httpServer;
 let isShuttingDown = false;
 let port = process.env.PORT || 8000;
