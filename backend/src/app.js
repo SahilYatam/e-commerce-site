@@ -21,7 +21,7 @@ import orderRouter from "./routers/order.routes.js"
 import { client, httpRequestsDuration } from "./utils/monitoring/metrics.js";
 
 const app = express();
-
+app.set("trust proxy", 1);
 app.use(helmet());
 
 app.use(cors({
@@ -77,15 +77,14 @@ app.use((req, res, next) => {
 
     next();
 })
-
-app.get("/api/v1/health", (req, res) => {
-  res.json({ status: "ok" });
-});
-
 app.get("/metrics", async (req, res) => {
     res.set("Content-Type", client.register.contentType);
     res.send(await client.register.metrics());
 })
+
+app.get("/api/v1/health", (req, res) => {
+  res.json({ status: "ok" });
+});
 
 
 app.use(errorHandler);
