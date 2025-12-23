@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-if(process.env.NODE_ENV !== "production"){
+if (process.env.NODE_ENV !== "production") {
     dotenv.config();
 }
 
@@ -23,22 +23,26 @@ import { client, httpRequestsDuration } from "./utils/monitoring/metrics.js";
 const app = express();
 
 app.use(helmet());
+
 app.use(cors({
-    origin: "https://e-commerce-site-nine-eta.vercel.app",
     // origin: "http://localhost:5173",
-    credentials: true
+    origin: "https://e-commerce-site-nine-eta.vercel.app",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
 }));
+
+
 app.use(morgan("dev"));
-app.use(express.json({limit: "20kb"}));
-app.use(express.urlencoded({extended: true}));
+app.use(express.json({ limit: "20kb" }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use((req, res, next) => {
     res.setHeader("Cache-Control", "no-store");
     next();
 })
 
-function limiter (windowMs, max) {
-    return rateLimit ({
+function limiter(windowMs, max) {
+    return rateLimit({
         windowMs,
         max,
         message: "Too many requests, please try again later.",
@@ -68,13 +72,17 @@ app.use("/api/v1/order", orderLimiter, orderRouter)
 app.use((req, res, next) => {
     const end = httpRequestsDuration.startTimer();
     res.on("finish", () => {
-        end({method: req.method, route: req.path, status_code: res.statusCode})
+        end({ method: req.method, route: req.path, status_code: res.statusCode })
     });
 
     next();
 })
 
-app.get("/metrics", async(req, res) => {
+app.get("/api/v1/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
+app.get("/metrics", async (req, res) => {
     res.set("Content-Type", client.register.contentType);
     res.send(await client.register.metrics());
 })
@@ -83,4 +91,4 @@ app.get("/metrics", async(req, res) => {
 app.use(errorHandler);
 app.use(notFoundHandler);
 
-export {app}
+export { app }
