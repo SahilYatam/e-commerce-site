@@ -43,7 +43,7 @@ export const getCartItems = createAsyncThunk(
     "cart/getCartItems",
     async (_, { rejectWithValue }) => {
         try {
-            const res = await axios.get("http://localhost:8000/api/v1/cart/cart-items", {
+            const res = await axios.get("https://e-commerce-site-otow.onrender.com/api/v1/cart/cart-items", {
                 withCredentials: true,
                 headers: {
                     "Cache-Control": "no-store",
@@ -57,7 +57,6 @@ export const getCartItems = createAsyncThunk(
                 grandTotal: data.grandTotal || 0,
             };
         } catch (error) {
-            console.error("❌ thunk error:", error);
             const message =
                 error.response?.data?.message || "Error while fetching cart items";
             return rejectWithValue(message);
