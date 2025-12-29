@@ -8,49 +8,84 @@ import { ApiError } from "../utils/responses/ApiError.js"
 
 export const createSession = async (userId) => {
     try {
-        const {accessToken, refreshToken: rawToken} = generateAccessAndRefreshToken(userId)
-    
+        const { accessToken, refreshToken: rawToken } = generateAccessAndRefreshToken(userId)
+
         const hashedToken = hashToken(rawToken)
-    
+
         const expiresAt = tokenExpiresAt();
-    
+
         const session = new Session({
             userId,
             refreshToken: hashedToken,
             expiresAt
         });
-    
+
         await session.save();
-    
-        return {accessToken, refreshToken: rawToken}
+
+        return { accessToken, refreshToken: rawToken }
     } catch (error) {
-        logger.error("Error while creating session", {message: error.message, stack: error.stack})
+        logger.error("❌ Error while creating session", { message: error.message, stack: error.stack })
         throw new ApiError(500, "Error while creating session")
     }
 }
 
-const getSessionByRefreshToken = async(refreshToken) => {
-    const hashedToken = hashToken(refreshToken)
-    const session = await Session.findOne({refreshToken: hashedToken})
+const getSessionByRefreshToken = async (refreshToken) => {
+    try {
+        const hashedToken = hashToken(refreshToken)
+        const session = await Session.findOne({ refreshToken: hashedToken })
 
-    if(!session || session.expiresAt.getTime() < Date.now()) {
-        throw new ApiError(401, "Session not found or refresh token is expired")
-    };
+        if (!session) {
+            logger.warn("⚠️ Session not found for refresh token");
+            throw new ApiError(401, "Invalid refresh token - session not found")
+        }
 
-    return session;
+        if (session.expiresAt.getTime() < Date.now()) {
+            logger.warn("⚠️ Refresh token expired", {
+                expiresAt: session.expiresAt,
+                now: new Date()
+            });
+            throw new ApiError(401, "Refresh token expired - please login again")
+        }
+
+        return session;
+    } catch (error) {
+        if (error instanceof ApiError) throw error;
+
+        logger.error("❌ Error getting session by refresh token", {
+            message: error.message,
+            stack: error.stack
+        });
+        throw new ApiError(500, "Error validating refresh token");
+    }
 }
 
 export const refreshAccessToken = async (refreshToken) => {
-    const session = await getSessionByRefreshToken(refreshToken)
+    try {
+        if (!refreshToken) {
+            throw new ApiError(401, "Refresh token is required");
+        }
 
-    const {accessToken, refreshToken: rawRefreshToken} = generateAccessAndRefreshToken(session.userId)
+        const session = await getSessionByRefreshToken(refreshToken)
 
-    const newRefreshToken = hashToken(rawRefreshToken);
+        const {accessToken, refreshToken: rawRefreshToken} = generateAccessAndRefreshToken(session.userId)
 
-    session.refreshToken = newRefreshToken;
-    session.expiresAt = tokenExpiresAt();
+        const newRefreshToken = hashToken(rawRefreshToken);
 
-    await session.save()
+        session.refreshToken = newRefreshToken;
+        session.expiresAt = tokenExpiresAt();
 
-    return {accessToken, refreshToken: rawRefreshToken}
+        await session.save()
+
+        logger.info("✅ Access token refreshed successfully", {userId: session.userId});
+
+        return {accessToken, refreshToken: rawRefreshToken}
+    } catch (error) {
+        if (error instanceof ApiError) throw error;
+        
+        logger.error("❌ Error refreshing access token", {
+            message: error.message,
+            stack: error.stack
+        });
+        throw new ApiError(500, "Error refreshing access token");
+    }
 }

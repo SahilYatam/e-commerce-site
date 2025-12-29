@@ -5,7 +5,12 @@ import { setCookies } from "../utils/handlers/cookies.js";
 import { refreshAccessToken } from "../services/session.service.js";
 
 export const handleRefreshAccessToken = asyncHandler(async(req, res) => {
-    const  token = req.cookies.refreshToken
+    const  token = req.cookies.refreshToken;
+
+    if (!token) {
+        throw new ApiError(401, "Refresh token not found in cookies");
+    }
+
     const {accessToken, refreshToken} = await refreshAccessToken(token);
 
     setCookies(res, accessToken, refreshToken)

@@ -39,7 +39,7 @@ export const PASSWORD_RESET_REQUEST_TEMPLATE = `
   <body>
     <div class="container">
       <h2>Password Reset Request</h2>
-      <p>We received a request to reset your password. Click the button below to create a new one:</p>
+      <p>We received a request to reset your password. Click the  below to create a new one:</p>
       <a href="{{reset_link}}" class="button">Reset Password</a>
       <p>This link will expire in 15 minutes. If you didn’t request a password reset, please ignore this email.</p>
       <div class="footer">
