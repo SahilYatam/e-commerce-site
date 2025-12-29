@@ -1,7 +1,7 @@
 import { asyncHandler } from "../utils/handlers/asyncHandler.js"
 
 import { setCookies } from "../utils/handlers/cookies.js";
-
+import { ApiError } from "../utils/responses/ApiError.js";
 import { refreshAccessToken } from "../services/session.service.js";
 
 export const handleRefreshAccessToken = asyncHandler(async(req, res) => {
