@@ -22,7 +22,10 @@ import { client, httpRequestsDuration } from "./utils/monitoring/metrics.js";
 
 const app = express();
 app.set("trust proxy", 1);
-app.use(helmet());
+app.use(helmet({
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+    crossOriginOpenerPolicy: false,
+}));
 
 // app.use(cors({
 //     // origin: "http://localhost:5173",
@@ -32,24 +35,25 @@ app.use(helmet());
 // }));
 
 const allowedOrigins = [
-  "https://role-based-authentication-psi.vercel.app",
-  "https://role-based-authentication-git-main-sahils-projects-8a4effa5.vercel.app",
-  "https://role-based-authentication-c3q0k881u-sahils-projects-8a4effa5.vercel.app",
+    "https://e-commerce-site-nine-eta.vercel.app"
 ];
 
-app.use(cors({
-    origin: function(origin, callback) {
-        if(!origin) return callback(null, true);
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin) return callback(null, true);
 
-        if(allowedOrigins.includes(origin)){
-            callback(null, true);
-        } else {
-            callback(new Error("CORS not allowed"));
+        if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
+            return callback(null, true);
         }
+
+        return callback(new Error("CORS not allowed"));
     },
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-}))
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+}
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 
 app.use(morgan("dev"));
@@ -65,6 +69,7 @@ function limiter(windowMs, max) {
     return rateLimit({
         windowMs,
         max,
+        skip: (req) => req.method === "OPTIONS",
         message: "Too many requests, please try again later.",
         standardHeaders: true,
         legacyHeaders: false
@@ -103,7 +108,7 @@ app.get("/metrics", async (req, res) => {
 })
 
 app.get("/api/v1/health", (req, res) => {
-  res.json({ status: "ok" });
+    res.json({ status: "ok" });
 });
 
 
