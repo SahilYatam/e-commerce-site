@@ -3,6 +3,7 @@ import Axios from "axios";
 const axios = Axios.create({
   baseURL: "https://e-commerce-site-otow.onrender.com/api/v1",
   withCredentials: true,
+  timeout: 60000 
 });
 
 let isRefreshing = false;
