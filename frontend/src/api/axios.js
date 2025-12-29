@@ -1,5 +1,6 @@
 import Axios from "axios";
 
+
 const axios = Axios.create({
   baseURL: "https://e-commerce-site-otow.onrender.com/api/v1",
   withCredentials: true,
@@ -39,7 +40,8 @@ axios.interceptors.response.use(
         return axios(originalRequest);
       } catch (err) {
         processQueue(err);
-        window.location.href = "/login";
+        // window.location.href = "/login";
+        window.dispatchEvent(new Event("auth:logout"));
         return Promise.reject(err);
       } finally {
         isRefreshing = false;
@@ -49,5 +51,7 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+console.log("Interceptor fired:", error.response?.status);
+
 
 export default axios;
