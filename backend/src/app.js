@@ -1,6 +1,6 @@
 import dotenv from "dotenv";
 if (process.env.NODE_ENV !== "production") {
-    dotenv.config();
+  dotenv.config();
 }
 
 import express from "express";
@@ -9,110 +9,136 @@ import cors from "cors";
 import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
+
 import { errorHandler, notFoundHandler } from "./middlewares/globalErrorHandler.js";
 
-import authRouter from "./routers/auth.routes.js"
-import sessionRouter from "./routers/session.routes.js"
-import productRouter from "./routers/product.routes.js"
-import cartRouter from "./routers/cart.routes.js"
-import orderRouter from "./routers/order.routes.js"
-
+import authRouter from "./routers/auth.routes.js";
+import sessionRouter from "./routers/session.routes.js";
+import productRouter from "./routers/product.routes.js";
+import cartRouter from "./routers/cart.routes.js";
+import orderRouter from "./routers/order.routes.js";
 
 import { client, httpRequestsDuration } from "./utils/monitoring/metrics.js";
 
 const app = express();
+
+/* ---------------------------- BASIC APP SETUP ---------------------------- */
+
 app.set("trust proxy", 1);
-app.use(helmet({
+
+/**
+ * Helmet – allow cross-origin access for frontend apps
+ */
+app.use(
+  helmet({
     crossOriginResourcePolicy: { policy: "cross-origin" },
     crossOriginOpenerPolicy: false,
-}));
+  })
+);
 
-// app.use(cors({
-//     // origin: "http://localhost:5173",
-//     origin: "https://e-commerce-site-nine-eta.vercel.app",
-//     credentials: true,
-//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-// }));
+/* ------------------------------- CORS SETUP ------------------------------- */
 
-const allowedOrigins = [
-    "https://e-commerce-site-nine-eta.vercel.app"
-];
-
+/**
+ * ✅ SAFE FOR VERCEL + LOCAL + RENDER
+ * - Allows all *.vercel.app deployments
+ * - Allows localhost during dev
+ * - Does NOT throw errors (critical)
+ */
 const corsOptions = {
-    origin: function (origin, callback) {
-        if (!origin) return callback(null, true);
+  origin: (origin, callback) => {
+    // Allow server-to-server, health checks, curl, Postman
+    if (!origin) return callback(null, true);
 
-        if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
-            return callback(null, true);
-        }
+    // Allow Vercel deployments
+    if (origin.endsWith(".vercel.app")) {
+      return callback(null, true);
+    }
 
-        return callback(new Error("CORS not allowed"));
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-}
+    // Allow local development
+    if (origin.startsWith("http://localhost")) {
+      return callback(null, true);
+    }
+
+    console.warn("CORS blocked:", origin);
+    return callback(null, false); // ❗ never throw
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+};
 
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
+/* ---------------------------- GLOBAL MIDDLEWARE --------------------------- */
 
 app.use(morgan("dev"));
 app.use(express.json({ limit: "20kb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+
 app.use((req, res, next) => {
-    res.setHeader("Cache-Control", "no-store");
-    next();
-})
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
 
-function limiter(windowMs, max) {
-    return rateLimit({
-        windowMs,
-        max,
-        skip: (req) => req.method === "OPTIONS",
-        message: "Too many requests, please try again later.",
-        standardHeaders: true,
-        legacyHeaders: false
+/* ---------------------------- RATE LIMITING ------------------------------- */
 
-    });
-}
+const limiter = (windowMs, max) =>
+  rateLimit({
+    windowMs,
+    max,
+    skip: (req) => req.method === "OPTIONS", 
+    message: "Too many requests, please try again later.",
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
 
-// global limiter, applies to all routes
-const globalRateLimiting = limiter(15 * 60 * 1000, 1000) // 15 minutes, 1000 requests
-app.use(globalRateLimiting);
+// Global limiter
+app.use(limiter(15 * 60 * 1000, 1000));
 
+// Route-specific limiters
 const authLimiter = limiter(15 * 60 * 1000, 100);
 const sessionLimiter = limiter(15 * 60 * 1000, 100);
-const productLimiter = limiter(15 * 60 * 1000, 500)
-const cartLimiter = limiter(15 * 60 * 1000, 500)
-const orderLimiter = limiter(15 * 60 * 1000, 500)
+const productLimiter = limiter(15 * 60 * 1000, 500);
+const cartLimiter = limiter(15 * 60 * 1000, 500);
+const orderLimiter = limiter(15 * 60 * 1000, 500);
+
+/* --------------------------------- ROUTES -------------------------------- */
 
 app.use("/api/v1/auth", authLimiter, authRouter);
 app.use("/api/v1/session", sessionLimiter, sessionRouter);
-app.use("/api/v1/product", productLimiter, productRouter)
-app.use("/api/v1/cart", cartLimiter, cartRouter)
-app.use("/api/v1/order", orderLimiter, orderRouter)
+app.use("/api/v1/product", productLimiter, productRouter);
+app.use("/api/v1/cart", cartLimiter, cartRouter);
+app.use("/api/v1/order", orderLimiter, orderRouter);
 
+/* ------------------------------ METRICS ---------------------------------- */
 
 app.use((req, res, next) => {
-    const end = httpRequestsDuration.startTimer();
-    res.on("finish", () => {
-        end({ method: req.method, route: req.path, status_code: res.statusCode })
+  const end = httpRequestsDuration.startTimer();
+  res.on("finish", () => {
+    end({
+      method: req.method,
+      route: req.path,
+      status_code: res.statusCode,
     });
-
-    next();
-})
-app.get("/metrics", async (req, res) => {
-    res.set("Content-Type", client.register.contentType);
-    res.send(await client.register.metrics());
-})
-
-app.get("/api/v1/health", (req, res) => {
-    res.json({ status: "ok" });
+  });
+  next();
 });
 
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", client.register.contentType);
+  res.send(await client.register.metrics());
+});
 
-app.use(errorHandler);
+/* ------------------------------ HEALTH ----------------------------------- */
+
+app.get("/api/v1/health", (req, res) => {
+  res.json({ status: "ok" });
+});
+
+/* ---------------------------- ERROR HANDLING ----------------------------- */
+
 app.use(notFoundHandler);
+app.use(errorHandler);
 
-export { app }
+export { app };
