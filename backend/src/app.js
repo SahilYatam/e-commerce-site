@@ -38,36 +38,14 @@ app.use(
 
 /* ------------------------------- CORS SETUP ------------------------------- */
 
-/**
- * ✅ SAFE FOR VERCEL + LOCAL + RENDER
- * - Allows all *.vercel.app deployments
- * - Allows localhost during dev
- * - Does NOT throw errors (critical)
- */
-const corsOptions = {
-  origin: (origin, callback) => {
-    // Allow server-to-server, health checks, curl, Postman
-    if (!origin) return callback(null, true);
+app.use(
+  cors({
+    origin: true,        // reflect request origin
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  })
+);
 
-    // Allow Vercel deployments
-    if (origin.endsWith(".vercel.app")) {
-      return callback(null, true);
-    }
-
-    // Allow local development
-    if (origin.startsWith("http://localhost")) {
-      return callback(null, true);
-    }
-
-    console.warn("CORS blocked:", origin);
-    return callback(null, false); // ❗ never throw
-  },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-};
-
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
 
 /* ---------------------------- GLOBAL MIDDLEWARE --------------------------- */
 
