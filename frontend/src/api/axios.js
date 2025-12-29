@@ -21,6 +21,7 @@ const processQueue = (error) => {
 axios.interceptors.response.use(
   response => response,
   async error => {
+    console.log("Interceptor fired:", error.response?.status);
     const originalRequest = error.config;
 
     if (error.response?.status === 401 && !originalRequest._retry) {
@@ -51,7 +52,5 @@ axios.interceptors.response.use(
     return Promise.reject(error);
   }
 );
-console.log("Interceptor fired:", error.response?.status);
-
 
 export default axios;
