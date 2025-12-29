@@ -24,12 +24,32 @@ const app = express();
 app.set("trust proxy", 1);
 app.use(helmet());
 
+// app.use(cors({
+//     // origin: "http://localhost:5173",
+//     origin: "https://e-commerce-site-nine-eta.vercel.app",
+//     credentials: true,
+//     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+// }));
+
+const allowedOrigins = [
+  "https://role-based-authentication-psi.vercel.app",
+  "https://role-based-authentication-git-main-sahils-projects-8a4effa5.vercel.app",
+  "https://role-based-authentication-c3q0k881u-sahils-projects-8a4effa5.vercel.app",
+];
+
 app.use(cors({
-    // origin: "http://localhost:5173",
-    origin: "https://e-commerce-site-nine-eta.vercel.app",
+    origin: function(origin, callback) {
+        if(!origin) return callback(null, true);
+
+        if(allowedOrigins.includes(origin)){
+            callback(null, true);
+        } else {
+            callback(new Error("CORS not allowed"));
+        }
+    },
     credentials: true,
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
-}));
+}))
 
 
 app.use(morgan("dev"));
