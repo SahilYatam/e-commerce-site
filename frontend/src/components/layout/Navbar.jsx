@@ -48,6 +48,7 @@ const Navbar = () => {
 
         return (
             <button
+                type="button"
                 onClick={handleAuthClick}
                 className={`w-28 cursor-pointer rounded-full text-white py-1
                 ${isAuthenticated
@@ -66,6 +67,7 @@ const AdminButton = () => {
 
     return (
         <button
+            type="button"
             onClick={() => navigate("/admin")}
             className="bg-green-500 hover:bg-green-600 px-3 py-1 rounded-full cursor-pointer"
         >
@@ -107,17 +109,17 @@ return (
 
                 {/* Desktop Links */}
                 <div className="hidden md:flex gap-10 items-center">
-                    <button onClick={() => navigate("/")}>
+                    <button type="button" onClick={() => navigate("/")}>
                         <AiOutlineHome className="h-6 w-6 cursor-pointer" name="Home"/>
                     </button>
 
                     {isAuthenticated && (
                         <>
-                            <button onClick={() => navigate("/cart")}>
+                            <button type="button" onClick={() => navigate("/cart")}>
                                 <AiOutlineShoppingCart className="h-6 w-6 cursor-pointer" />
                             </button>
 
-                            <button onClick={() => navigate("/orders")}>
+                            <button type="button" onClick={() => navigate("/orders")}>
                                 <BsBoxSeam className="h-5 w-5 cursor-pointer" />
                             </button>
                         </>
@@ -130,6 +132,7 @@ return (
 
                 {/* Mobile Menu Toggle */}
                 <button
+                    type="button"
                     onClick={() => setIsMenuOpen(!isMenuOpen)}
                     className="md:hidden"
                 >
@@ -146,6 +149,7 @@ return (
         {isMenuOpen && (
             <div className="md:hidden bg-white w-full px-6 py-4 space-y-3 border-t">
                 <button
+                    type="button"
                     onClick={() => navigate("/")}
                     className="flex items-center w-full text-gray-700"
                 >
@@ -155,6 +159,7 @@ return (
                 {isAuthenticated && (
                     <>
                         <button
+                            type="button"
                             onClick={() => navigate("/cart")}
                             className="flex items-center w-full text-gray-700"
                         >
@@ -162,6 +167,7 @@ return (
                         </button>
 
                         <button
+                            type="button"
                             onClick={() => navigate("/orders")}
                             className="flex items-center w-full text-gray-700"
                         >

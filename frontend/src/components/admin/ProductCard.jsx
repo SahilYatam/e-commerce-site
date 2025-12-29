@@ -18,6 +18,7 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
             </div>
             <div className="flex space-x-2">
                 <button
+                    type="button"
                     onClick={() => onEdit(product)}
                     className="flex-1 bg-yellow-500 text-white px-2 py-1.5 text-xs rounded hover:bg-yellow-600 flex items-center justify-center"
                 >
@@ -25,6 +26,7 @@ const ProductCard = ({ product, onEdit, onDelete }) => {
                     Edit
                 </button>
                 <button
+                    type="button"
                     onClick={() => onDelete(product._id)}
                     className="flex-1 bg-red-500 text-white px-2 py-1.5 text-xs rounded hover:bg-red-600 flex items-center justify-center"
                 >

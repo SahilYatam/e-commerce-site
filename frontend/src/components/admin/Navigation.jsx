@@ -6,6 +6,7 @@ const Navigation = ({ activeTab, onTabChange }) => {
       <div className="border-b border-gray-200">
         <nav className="flex space-x-8">
           <button
+            type="button"
             onClick={() => onTabChange('products')}
             className={`py-4 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'products'
@@ -17,6 +18,7 @@ const Navigation = ({ activeTab, onTabChange }) => {
             Products
           </button>
           <button
+            type="button"
             onClick={() => onTabChange('orders')}
             className={`py-4 px-1 border-b-2 font-medium text-sm ${
               activeTab === 'orders'

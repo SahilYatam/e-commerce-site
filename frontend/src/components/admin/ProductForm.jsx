@@ -98,12 +98,14 @@ const ProductForm = ({ formData, onInputChange, onSubmit, onCancel, isEditing })
 
             <div className="flex space-x-3 pt-4">
                 <button
+                    type="button"
                     onClick={handleSubmit}
                     className="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 font-medium"
                 >
                     {isEditing ? 'Update Product' : 'Add Product'}
                 </button>
                 <button
+                    type="button"
                     onClick={onCancel}
                     className="flex-1 bg-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-400 font-medium"
                 >

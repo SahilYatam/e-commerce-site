@@ -53,6 +53,7 @@ const OrderCard = ({ order }) => {
 
                 {order.status === "pending" && (
                     <button
+                        type="button"
                         onClick={handleCancel}
                         className="w-full bg-red-500 text-white py-2 rounded-xl mb-2"
                     >
@@ -62,6 +63,7 @@ const OrderCard = ({ order }) => {
 
                 {order.status === "canceled" && (
                     <button
+                        type="button"
                         onClick={handleHide}
                         className="w-full bg-gray-400 text-white py-2 rounded-xl"
                     >

@@ -47,6 +47,7 @@ const OrderRow = ({ order, onConfirm, onReject }) => {
                 {order.status === "pending" && (
                     <div className="flex gap-2">
                         <button
+                            type="button"
                             onClick={() => onConfirm(order._id)}
                             className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 flex items-center"
                         >
@@ -55,6 +56,7 @@ const OrderRow = ({ order, onConfirm, onReject }) => {
                         </button>
 
                         <button
+                            type="button"
                             onClick={() => onReject(order._id)}
                             className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 flex items-center"
                         >
