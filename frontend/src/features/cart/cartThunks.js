@@ -43,8 +43,7 @@ export const getCartItems = createAsyncThunk(
     "cart/getCartItems",
     async (_, { rejectWithValue }) => {
         try {
-            const res = await axios.get("https://e-commerce-site-otow.onrender.com/api/v1/cart/cart-items", {
-                withCredentials: true,
+            const res = await axios.get("/cart/cart-items", {
                 headers: {
                     "Cache-Control": "no-store",
                     "Pragma": "no-cache",
