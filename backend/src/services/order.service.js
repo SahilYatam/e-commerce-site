@@ -107,7 +107,7 @@ const hideOrder = async(userId, orderId) => {
 
 const getAllOrdersForUser = async(userId) => {
     const orders = await Order.find({userId, isHiddenByUser: false})
-    .populate("items.productId", "productName price category productImage")
+    .populate("items.productId", "productName price category productImage description")
     .sort({ createdAt: -1 })
 
     return orders
@@ -115,7 +115,7 @@ const getAllOrdersForUser = async(userId) => {
 
 const getOrders = async() => {
     const orders = await Order.find({status: {$ne: "canceled"}})
-    .populate("items.productId", "productName price category productImage")
+    .populate("items.productId", "productName price category productImage description")
     .populate("userId", "name email")
     .sort({ createdAt: -1 });
 
