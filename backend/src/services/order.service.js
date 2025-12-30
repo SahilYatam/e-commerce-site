@@ -127,7 +127,7 @@ const confirmOrder = async( orderId ) => {
         {_id: orderId, status: "pending"},
         { status: "confirmed" },
         { new: true, runValidators: true }
-    ).populate('items.productId', 'productName price category productImage');
+    ).populate('items.productId', 'productName price category productImage description');
 
     if(!order) throw new ApiError(404, "Pending order not found or already confirmed");
     
@@ -139,7 +139,7 @@ const rejectOrder = async(orderId) => {
         {_id: orderId, status: "pending"},
         { status: "reject" },
         { new: true, runValidators: true }
-    ).populate('items.productId', 'productName price category productImage');
+    ).populate('items.productId', 'productName price category productImage description');
 
     if(!order) throw new ApiError(404, "Pending order not found or already confirmed");
     
