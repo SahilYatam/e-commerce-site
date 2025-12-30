@@ -100,6 +100,7 @@ export const cancelOrder = createAsyncThunk(
             const res = await axios.patch(`/order/cancel-order/${orderId}`);
             return {
                 orderId: orderId,
+                order: res.data.data.order, 
                 message: res.data.message
             }
         } catch (error) {

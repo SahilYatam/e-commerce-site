@@ -27,6 +27,14 @@ const OrderStatus = ({ orderId, status }) => {
                     textColor: 'text-red-700',
                     borderColor: 'border-red-300'
                 };
+            case 'reject':
+                return {
+                    icon: <XCircle className="w-4 h-4" />,
+                    text: 'Rejected',
+                    bgColor: 'bg-red-100',
+                    textColor: 'text-red-700',
+                    borderColor: 'border-red-300'
+                };
             default:
                 return {
                     icon: <Package className="w-4 h-4" />,
