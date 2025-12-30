@@ -1,5 +1,5 @@
 const ProductForm = ({ formData, onInputChange, onSubmit, onCancel, isEditing }) => {
-    const categories = ['Electronics', 'Clothing', 'Books', 'Home & Garden', 'Sports', 'Toys'];
+    const categories = ['Electronics', 'Clothing', 'Books', 'Home & Kitchen', 'Sports & Outdoors', 'Beauty & Personal care', 'Other'];
 
     const handleSubmit = (e) => {
         e.preventDefault();
