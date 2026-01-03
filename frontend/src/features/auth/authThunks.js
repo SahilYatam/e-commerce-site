@@ -32,7 +32,7 @@ export const logoutUser = createAsyncThunk(
     async (_, {dispatch}) => {
         try {
             // Clear user from state FIRST
-            dispatch({type: "auth/logout"})
+            dispatch({type: "auth/logout"});
 
             // THEN call backend
             const res = await axios.post("/auth/logout");
