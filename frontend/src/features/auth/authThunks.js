@@ -29,9 +29,18 @@ export const login = createAsyncThunk(
 
 export const logoutUser = createAsyncThunk(
     "auth/logout",
-    async () => {
-        const res = await axios.post("/auth/logout");
-        return res.data
+    async (_, {dispatch}) => {
+        try {
+            // Clear user from state FIRST
+            dispatch({type: "auth/logout"})
+
+            // THEN call backend
+            const res = await axios.post("/auth/logout");
+            return res.data
+        } catch (error) {
+            console.log("Logout error (ignored):", error.message);
+            return { message: "Logged out locally" };
+        }
     }
 )
 

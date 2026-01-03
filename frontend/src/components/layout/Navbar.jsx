@@ -34,10 +34,26 @@ const Navbar = () => {
     }, [searchValue, dispatch, navigate]);
 
     /* ---------------- Auth Handler ---------------- */
+
+    // Listen for logout event from axios interceptor
+    useEffect(() => {
+        const handleAuthLogout = () => {
+            dispatch({type: "auth/logout"});
+            navigate("/login")
+        }
+        window.addEventListener("auth:logout", handleAuthLogout);
+
+        return () => {
+            window.removeEventListener("auth:logout", handleAuthLogout);
+        }
+    }, [dispatch, navigate]);
+
     const handleAuthClick = () => {
         if (loading) return;
         if (isAuthenticated) {
-            dispatch(logoutUser()).then(() => navigate("/login"));
+            // Call logout thunk which clears state first, then backend
+            dispatch(logoutUser());
+            navigate("/login");
         } else {
             navigate("/login");
         }
