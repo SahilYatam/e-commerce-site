@@ -4,14 +4,16 @@ const productSchema = new mongoose.Schema({
     sellerId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: true,
+        index: true
     },
 
     productName: {
         type: String,
         required: true,
         lowercase: true,
-        trim: true
+        trim: true,
+        index: true
     },
 
     productImage: {
@@ -46,9 +48,20 @@ const productSchema = new mongoose.Schema({
             "sports & outdoors",
             "other"
         ],
-        default: "other"
+        default: "other",
+        index: true // ✅ category filtering
     }
 
 }, { timestamps: true });
+
+/* ======================
+   Compound Indexes
+   ====================== */
+
+// ✅ Category pages sorted by newest
+productSchema.index({ category: 1, createdAt: -1 });
+
+// ✅ Seller dashboard sorted by newest
+productSchema.index({ sellerId: 1, createdAt: -1 });
 
 export const Product = mongoose.model("Product", productSchema);

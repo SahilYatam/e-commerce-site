@@ -4,13 +4,14 @@ import { Counter } from "./counter.model.js";
 const orderSchema = new mongoose.Schema({
     orderId: {
         type: String,
-        unique: true
+        unique: true,
     },
 
     userId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
-        required: true
+        required: true,
+        index: true
     },
 
     items: [{
@@ -19,37 +20,12 @@ const orderSchema = new mongoose.Schema({
             ref: "Product",
             required: true
         },
-
-        productName: {
-            type: String,
-            required: true
-        },
-
-        description: {
-            type: String,
-            required: true,
-        },
-
-        quantity: {
-            type: Number,
-            default: 1,
-            min: 1
-        },
-
-        priceAtPurchase: {
-            type: Number,
-            required: true
-        },
-
-        itemTotal: {
-            type: Number,
-            required: true
-        },
-
-        productImage: {
-            type: String,
-        },
-
+        productName: String,
+        description: String,
+        quantity: Number,
+        priceAtPurchase: Number,
+        itemTotal: Number,
+        productImage: String,
     }],
 
     totalAmount: {
@@ -57,28 +33,41 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
 
-    deliveryAddress: { type: String, required: true },
+    deliveryAddress: {
+        type: String,
+        required: true
+    },
 
     status: {
         type: String,
         enum: ["pending", "confirmed", "canceled", "reject"],
-        default: "pending"
+        default: "pending",
+        index: true
     },
 
     paymentStatus: {
         type: String,
         enum: ["unpaid", "paid"],
-        default: "unpaid"
+        default: "unpaid",
+        index: true
     },
 
-    isHiddenByUser: { type: Boolean, default: false },
+    isHiddenByUser: {
+        type: Boolean,
+        default: false,
+        index: true
+    },
 
     hiddenAt: Date
 
 }, { timestamps: true });
 
+orderSchema.index({ userId: 1, createdAt: -1 });
+orderSchema.index({ userId: 1, status: 1 });
+orderSchema.index({ status: 1, createdAt: -1 });
+
+
 orderSchema.pre("save", async function (next) {
-    // Only generate orderId for new orders
     if (!this.isNew) return next();
 
     const counter = await Counter.findOneAndUpdate(
@@ -90,9 +79,7 @@ orderSchema.pre("save", async function (next) {
     const padded = String(counter.seq).padStart(3, "0");
     this.orderId = `ORD-${padded}`;
 
-    next()
-})
+    next();
+});
 
-orderSchema.index({ userId: 1, createdAt: -1 });
-
-export const Order = mongoose.model("Order", orderSchema)
+export const Order = mongoose.model("Order", orderSchema);

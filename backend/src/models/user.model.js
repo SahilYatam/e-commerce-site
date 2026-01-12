@@ -11,7 +11,8 @@ const userSchema = new mongoose.Schema({
         required: true,
         unique: true,
         lowercase: true,
-        trim: true
+        trim: true,
+        index: true
     },
 
     password: {
@@ -22,10 +23,13 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         enum: ["buyer", "seller"],
-        default: "buyer"
+        default: "buyer",
     },
 
-    lastUsedAddress: { type: String, default: '' },
+    lastUsedAddress: { 
+        type: String, 
+        default: '' 
+    },
 
     resetPasswordToken: {
         type: String,
@@ -35,6 +39,8 @@ const userSchema = new mongoose.Schema({
         type: Date,
     },
 
-}, {timestamps: true});
+}, { timestamps: true });
 
-export const User = mongoose.model("User", userSchema)
+userSchema.index({ createdAt: -1 });
+
+export const User = mongoose.model("User", userSchema);

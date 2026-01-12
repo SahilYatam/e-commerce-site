@@ -1,90 +1,101 @@
-import { Cart } from "../models/cart.model.js"
+import { Cart } from "../models/cart.model.js";
 import { Product } from "../models/product.model.js";
-import { ApiError } from "../utils/responses/ApiError.js"
+import { ApiError } from "../utils/responses/ApiError.js";
 
 const addToCart = async (userId, productId, quantity = 1) => {
-
     if (quantity <= 0) throw new ApiError(400, "Quantity must be greater than 0");
 
-    const cartProduct = await Cart.findOne({ userId, productId });
+    const product = await Product.findById(productId, { stock: 1 }).lean();
+    if (!product) throw new ApiError(404, "Product not found");
 
-    if (cartProduct) {
-        cartProduct.quantity += quantity;
+    const cartItem = await Cart.findOneAndUpdate(
+        { userId, productId },
+        { $inc: { quantity } },
+        {
+            new: true,
+            upsert: true,
+            setDefaultsOnInsert: true,
+        }
+    );
 
-        await cartProduct.save();
-        return cartProduct;
+    if (cartItem.quantity > product.stock) {
+        throw new ApiError(400, `Only ${product.stock} items available in stock`);
     }
 
-    const newCartProduct = new Cart({
-        userId,
-        productId,
-        quantity
-    });
-
-    await newCartProduct.save();
-
-    return newCartProduct;
-}
+    return cartItem;
+};
 
 const updateCartQuantity = async (userId, productId, newQuantity) => {
-    if (newQuantity < 0) throw new ApiError(400, "Quantity cannot be negetive");
+    if (newQuantity < 0) {
+        throw new ApiError(400, "Quantity cannot be negative");
+    }
 
-    const cartProduct = await Cart.findOne({ userId, productId });
-    if (!cartProduct) throw new ApiError(404, "Product not found in cart");
-
-    // IF new quantity is 0, remove from cart
+    // Remove item if quantity is 0
     if (newQuantity === 0) {
-        await Cart.findByIdAndDelete(cartProduct._id);
+        const removed = await Cart.findOneAndDelete({ userId, productId });
+        if (!removed) throw new ApiError(404, "Product not found in cart");
+
         return { message: "Product removed from cart", removed: true };
     }
 
-    // Checking stock availability
-    const product = await Product.findById(productId);
+    // Check stock
+    const product = await Product.findById(productId, { stock: 1 }).lean();
+    if (!product) throw new ApiError(404, "Product not found");
+
     if (newQuantity > product.stock) {
         throw new ApiError(400, `Only ${product.stock} items available in stock`);
     }
 
-    cartProduct.quantity = newQuantity;
+    const updated = await Cart.findOneAndUpdate(
+        { userId, productId },
+        { $set: { quantity: newQuantity } },
+        { new: true }
+    );
 
-    await cartProduct.save();
-    await cartProduct.populate("productId")
+    if (!updated) throw new ApiError(404, "Product not found in cart");
 
-    return cartProduct;
-}
-
+    return updated;
+};
 
 const removeFromcart = async (userId, cartItemId) => {
-    const removedProduct = await Cart.findOneAndDelete({ userId, _id: cartItemId });
+    const removed = await Cart.findOneAndDelete({
+        _id: cartItemId,
+        userId,
+    });
 
-    if (!removedProduct) throw new ApiError(404, "Product not found in cart");
+    if (!removed) {
+        throw new ApiError(404, "Product not found in cart");
+    }
 
-    return removedProduct;
-}
+    return removed;
+};
 
 const getCartItems = async (userId) => {
     const cartItems = await Cart.find({ userId })
         .populate({
             path: "productId",
-            select: "productName productImage price category"
-        });
+            select: "productName productImage price category",
+        })
+        .lean();
 
-    const cartWithTotals = cartItems.map(item => ({
-        ...item.toObject(),
-        itemTotal: item.productId.price * item.quantity
-    }));
+    let grandTotal = 0;
 
-    const grandTotal = cartWithTotals.reduce(
-        (sum, item) => sum + item.itemTotal,
-        0
-    );
+    const cartWithTotals = cartItems.map((item) => {
+        const itemTotal = item.productId.price * item.quantity;
+        grandTotal += itemTotal;
 
-    return { cartItems: cartWithTotals, grandTotal }
-}
+        return {
+            ...item,
+            itemTotal,
+        };
+    });
 
+    return { cartItems: cartWithTotals, grandTotal };
+};
 
 export const cartService = {
     addToCart,
     updateCartQuantity,
     removeFromcart,
-    getCartItems
-}
+    getCartItems,
+};
