@@ -57,18 +57,24 @@ const updateProduct = async (productId, data) => {
     return product;
 };
 
-const getAllProducts = async ({ page = 1, limit = 10 }) => {
+const getAllProducts = async ({ page = 1, limit = 10 } = {}) => {
+    page = Number(page);
+    limit = Number(limit);
+
     const skip = (page - 1) * limit;
 
     const [products, total] = await Promise.all([
-        Product.find({}, {
-            productName: 1,
-            price: 1,
-            productImage: 1,
-            category: 1,
-            stock: 1,
-            createdAt: 1
-        })
+        Product.find(
+            {},
+            {
+                productName: 1,
+                price: 1,
+                productImage: 1,
+                category: 1,
+                stock: 1,
+                createdAt: 1
+            }
+        )
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(limit)
@@ -81,10 +87,10 @@ const getAllProducts = async ({ page = 1, limit = 10 }) => {
         page,
         limit,
         total,
-        // totalPages: Math.ceil(total / limit),
         products
     };
 };
+
 
 
 const getProductById = async (id) => {
