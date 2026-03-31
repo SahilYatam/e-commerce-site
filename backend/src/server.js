@@ -5,7 +5,7 @@ import mongoose from "mongoose";
 
 let httpServer;
 let isShuttingDown = false;
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 3000;
 
 const server = async () => {
     try {

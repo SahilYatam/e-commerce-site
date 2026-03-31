@@ -87,10 +87,10 @@ const getAllProducts = async ({ page = 1, limit = 10 } = {}) => {
         page,
         limit,
         total,
-        products
+        totalPages: Math.ceil(total / limit),
+        products,
     };
 };
-
 
 
 const getProductById = async (id) => {

@@ -45,10 +45,10 @@ const updateProduct = asyncHandler(async (req, res) => {
 });
 
 const getAllProducts = asyncHandler(async (req, res) => {
-    const { page, limit, total, products } =
+    const { page, limit, total, totalPages, products } =
         await productService.getAllProducts(req.query);
 
-    const meta = { page, limit, total };
+    const meta = { page, limit, total, totalPages };
 
     const message =
         total === 0
