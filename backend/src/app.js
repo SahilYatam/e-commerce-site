@@ -49,8 +49,6 @@ app.use(
 
 /* ---------------------------- GLOBAL MIDDLEWARE --------------------------- */
 
-app.use("/img", express.static(path.join(process.cwd(), "data/img")));
-
 app.use(morgan("dev"));
 app.use(express.json({ limit: "20kb" }));
 app.use(express.urlencoded({ extended: true }));
