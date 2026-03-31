@@ -10,6 +10,9 @@ import morgan from "morgan";
 import cookieParser from "cookie-parser";
 import rateLimit from "express-rate-limit";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
 import { errorHandler, notFoundHandler } from "./middlewares/globalErrorHandler.js";
 
 import authRouter from "./routers/auth.routes.js";
@@ -21,6 +24,8 @@ import orderRouter from "./routers/order.routes.js";
 import { client, httpRequestsDuration } from "./utils/monitoring/metrics.js";
 
 const app = express();
+
+
 
 /* ---------------------------- BASIC APP SETUP ---------------------------- */
 
@@ -48,8 +53,10 @@ app.use(
 
 
 /* ---------------------------- GLOBAL MIDDLEWARE --------------------------- */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-app.use("/img", express.static(path.join(process.cwd(), "data/img")));
+app.use("/img", express.static(path.join(__dirname, "../data/img")));
 
 app.use(morgan("dev"));
 app.use(express.json({ limit: "20kb" }));
