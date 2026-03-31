@@ -9,7 +9,8 @@ const initialState = {
     pagination: {
         page: 1,
         limit: 10,
-        total: 0
+        total: 0,
+        totalPages: 1
     },
     product: null,
     loading: false,
@@ -107,6 +108,7 @@ const productSlice = createSlice({
             .addCase(loadAllProducts.fulfilled, (state, action) => {
                 state.loading = false;
                 state.products = action.payload.products;
+                state.pagination = action.payload.meta;
             })
             .addCase(loadAllProducts.rejected, (state, action) => {
                 state.loading = false;

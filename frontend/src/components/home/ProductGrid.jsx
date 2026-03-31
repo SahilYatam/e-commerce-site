@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom"
 const ProductGrid = ({ products }) => {
     const navigate = useNavigate()
     return (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 mt-5 justify-center mb-6 px-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 gap-x-10 gap-y-6 mt-5 mb-6 px-2 sm:px-4 max-w-7xl mx-auto">
             {products.map((product) => (
                 <ProductCard key={product._id} product={product}>
                     {/* Default action for Home/Search */}

@@ -59,11 +59,14 @@ export const deleteProduct = createAsyncThunk(
 
 export const loadAllProducts = createAsyncThunk(
     "product/getAllProducts",
-    async (_, { rejectWithValue }) => {
+    async ({page = 1, limit = 10}, { rejectWithValue }) => {
         try {
-            const res = await axios.get("/product/all-products")
+            const res = await axios.get("/product/all-products", {
+                params: {page, limit}
+            })
             return {
                 products: res.data.data.products,
+                meta: res.data.meta,
                 message: res.data.message
             }
         } catch (error) {
