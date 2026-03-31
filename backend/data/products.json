@@ -1,7 +1,7 @@
 [
   {
     "productName": "wireless bluetooth headphones",
-    "productImage": "img/bluetoothheadphones.jpg",
+    "productImage": "/img/bluetoothheadphones.jpg",
     "price": 2499,
     "description": "high quality wireless headphones with deep bass and long battery life",
     "category": "electronics",
@@ -9,7 +9,7 @@
   },
   {
     "productName": "smart fitness band pro",
-    "productImage": "img/band.jpg",
+    "productImage": "/img/band.jpg",
     "price": 1799,
     "description": "track steps heart rate and sleep with this advanced fitness band",
     "category": "electronics",
@@ -17,7 +17,7 @@
   },
   {
     "productName": "portable bluetooth speaker mini",
-    "productImage": "img/speaker.jpg",
+    "productImage": "/img/speaker.jpg",
     "price": 1299,
     "description": "compact speaker delivering powerful sound and clear bass",
     "category": "electronics",
@@ -25,7 +25,7 @@
   },
   {
     "productName": "gaming mouse rgb pro",
-    "productImage": "img/mouse_rgb.jpg",
+    "productImage": "/img/mouse_rgb.jpg",
     "price": 999,
     "description": "high precision gaming mouse with customizable rgb lighting",
     "category": "electronics",
@@ -33,7 +33,7 @@
   },
   {
     "productName": "mechanical keyboard blue switch",
-    "productImage": "img/blue_keyboard.jpg",
+    "productImage": "/img/blue_keyboard.jpg",
     "price": 3499,
     "description": "durable mechanical keyboard designed for gamers and coders",
     "category": "electronics",
@@ -42,7 +42,7 @@
 
   {
     "productName": "men cotton casual shirt slim fit",
-    "productImage": "img/cotton-shirt.jpg",
+    "productImage": "/img/cotton-shirt.jpg",
     "price": 899,
     "description": "comfortable breathable cotton shirt for everyday wear",
     "category": "clothing",
@@ -50,7 +50,7 @@
   },
   {
     "productName": "women floral summer dress",
-    "productImage": "img/summer-dress.jpg",
+    "productImage": "/img/summer-dress.jpg",
     "price": 1399,
     "description": "lightweight floral dress perfect for summer outings",
     "category": "clothing",
@@ -58,7 +58,7 @@
   },
   {
     "productName": "men denim jeans stretchable",
-    "productImage": "img/demin-jeans.jpg",
+    "productImage": "/img/demin-jeans.jpg",
     "price": 1599,
     "description": "stylish stretchable denim jeans with modern fit",
     "category": "clothing",
@@ -66,7 +66,7 @@
   },
   {
     "productName": "women leather handbag premium",
-    "productImage": "img/leather-bag.jpg",
+    "productImage": "/img/leather-bag.jpg",
     "price": 2499,
     "description": "elegant handbag with spacious compartments and premium finish",
     "category": "clothing",
@@ -74,7 +74,7 @@
   },
   {
     "productName": "men sports running shoes",
-    "productImage": "img/running-shoes.jpg",
+    "productImage": "/img/running-shoes.jpg",
     "price": 2199,
     "description": "lightweight running shoes designed for comfort and durability",
     "category": "clothing",
@@ -83,7 +83,7 @@
 
   {
     "productName": "non stick cookware set 5 pcs",
-    "productImage": "img/cookware.jpg",
+    "productImage": "/img/cookware.jpg",
     "price": 3499,
     "description": "premium cookware set ideal for healthy and oil free cooking",
     "category": "home & kitchen",
@@ -91,7 +91,7 @@
   },
   {
     "productName": "electric kettle stainless steel 1.5l",
-    "productImage": "img/kettle.jpg",
+    "productImage": "/img/kettle.jpg",
     "price": 1199,
     "description": "fast boiling kettle with auto shut off safety feature",
     "category": "home & kitchen",
@@ -99,7 +99,7 @@
   },
   {
     "productName": "kitchen knife set professional",
-    "productImage": "img/knife-set.jpg",
+    "productImage": "/img/knife-set.jpg",
     "price": 1699,
     "description": "sharp durable knives perfect for precise cutting",
     "category": "home & kitchen",
@@ -107,7 +107,7 @@
   },
   {
     "productName": "microwave oven 20l compact",
-    "productImage": "img/microwave-oven.jpg",
+    "productImage": "/img/microwave-oven.jpg",
     "price": 6999,
     "description": "compact microwave oven with multiple cooking modes",
     "category": "home & kitchen",
@@ -115,7 +115,7 @@
   },
   {
     "productName": "stainless steel water bottle insulated",
-    "productImage": "img/steel-bottel.jpg",
+    "productImage": "/img/steel-bottel.jpg",
     "price": 699,
     "description": "keeps drinks hot or cold for long hours",
     "category": "home & kitchen",
@@ -124,7 +124,7 @@
 
   {
     "productName": "self help productivity book",
-    "productImage": "img/books.jpg",
+    "productImage": "/img/books.jpg",
     "price": 499,
     "description": "improve focus and productivity with proven strategies",
     "category": "books",
@@ -132,7 +132,7 @@
   },
   {
     "productName": "thriller mystery novel bestseller",
-    "productImage": "img/thriller-books.jpg",
+    "productImage": "/img/thriller-books.jpg",
     "price": 399,
     "description": "engaging thriller with unexpected twists",
     "category": "books",
@@ -141,7 +141,7 @@
 
   {
     "productName": "face moisturizer hydrating cream",
-    "productImage": "img/face-mositurizer.jpg",
+    "productImage": "/img/face-mositurizer.jpg",
     "price": 599,
     "description": "deep hydration cream suitable for all skin types",
     "category": "beauty & personal care",
@@ -149,7 +149,7 @@
   },
   {
     "productName": "herbal shampoo anti hair fall",
-    "productImage": "img/herbal-shampoo.jpg",
+    "productImage": "/img/herbal-shampoo.jpg",
     "price": 499,
     "description": "gentle herbal formula to reduce hair fall and strengthen roots",
     "category": "beauty & personal care",
@@ -158,7 +158,7 @@
 
   {
     "productName": "yoga mat anti slip premium",
-    "productImage": "img/yoga-mat.jpg",
+    "productImage": "/img/yoga-mat.jpg",
     "price": 899,
     "description": "comfortable anti slip yoga mat for workouts and meditation",
     "category": "sports & outdoors",
@@ -167,7 +167,7 @@
   
   {
     "productName": "smart led tv 43 inch full hd",
-    "productImage": "img/led-tv.jpg",
+    "productImage": "/img/led-tv.jpg",
     "price": 22999,
     "description": "43 inch smart tv with full hd display and streaming apps support",
     "category": "electronics",
@@ -175,7 +175,7 @@
   },
   {
     "productName": "wireless earbuds noise cancelling",
-    "productImage": "img/wireless-earbuds.jpg",
+    "productImage": "/img/wireless-earbuds.jpg",
     "price": 1999,
     "description": "true wireless earbuds with active noise cancellation",
     "category": "electronics",
@@ -183,7 +183,7 @@
   },
   {
     "productName": "power bank 20000mah fast charging",
-    "productImage": "img/power-bank.jpg",
+    "productImage": "/img/power-bank.jpg",
     "price": 1499,
     "description": "high capacity power bank with fast charging support",
     "category": "electronics",
@@ -191,7 +191,7 @@
   },
   {
     "productName": "usb c fast charger 65w",
-    "productImage": "img/usbfast.jpg",
+    "productImage": "/img/usbfast.jpg",
     "price": 999,
     "description": "compact 65w fast charger compatible with multiple devices",
     "category": "electronics",
@@ -199,7 +199,7 @@
   },
   {
     "productName": "laptop stand adjustable aluminum",
-    "productImage": "img/laptop-stand.jpg",
+    "productImage": "/img/laptop-stand.jpg",
     "price": 1299,
     "description": "ergonomic aluminum stand for better laptop cooling and posture",
     "category": "electronics",
@@ -208,7 +208,7 @@
 
   {
     "productName": "men formal blazer slim fit",
-    "productImage": "img/formalblazer.jpg",
+    "productImage": "/img/formalblazer.jpg",
     "price": 3999,
     "description": "stylish formal blazer perfect for office and events",
     "category": "clothing",
@@ -216,7 +216,7 @@
   },
   {
     "productName": "women yoga leggings stretchable",
-    "productImage": "img/yoga-leggings.jpg",
+    "productImage": "/img/yoga-leggings.jpg",
     "price": 799,
     "description": "comfortable stretchable leggings for yoga and workouts",
     "category": "clothing",
@@ -224,7 +224,7 @@
   },
   {
     "productName": "unisex hoodie fleece warm",
-    "productImage": "img/hoodies.jpg",
+    "productImage": "/img/hoodies.jpg",
     "price": 1499,
     "description": "warm fleece hoodie suitable for winter wear",
     "category": "clothing",
@@ -232,7 +232,7 @@
   },
   {
     "productName": "men leather wallet premium",
-    "productImage": "img/leather-wallet.jpg",
+    "productImage": "/img/leather-wallet.jpg",
     "price": 999,
     "description": "durable leather wallet with multiple card slots",
     "category": "clothing",
@@ -240,7 +240,7 @@
   },
   {
     "productName": "women sandals casual comfort",
-    "productImage": "img/woman-sandals.jpg",
+    "productImage": "/img/woman-sandals.jpg",
     "price": 1199,
     "description": "comfortable sandals for everyday use",
     "category": "clothing",
@@ -249,7 +249,7 @@
 
   {
     "productName": "air fryer digital 4l",
-    "productImage": "img/air-fryer.jpg",
+    "productImage": "/img/air-fryer.jpg",
     "price": 5499,
     "description": "cook healthy meals with less oil using digital air fryer",
     "category": "home & kitchen",
@@ -257,7 +257,7 @@
   },
   {
     "productName": "ceiling fan energy saving",
-    "productImage": "img/ceiling-fan.jpg",
+    "productImage": "/img/ceiling-fan.jpg",
     "price": 2899,
     "description": "high speed energy efficient ceiling fan",
     "category": "home & kitchen",
@@ -265,7 +265,7 @@
   },
   {
     "productName": "led desk lamp adjustable brightness",
-    "productImage": "img/led-lamp.jpg",
+    "productImage": "/img/led-lamp.jpg",
     "price": 899,
     "description": "eye friendly desk lamp with adjustable brightness levels",
     "category": "home & kitchen",
@@ -273,7 +273,7 @@
   },
   {
     "productName": "storage organizer box set",
-    "productImage": "img/box-set.jpg",
+    "productImage": "/img/box-set.jpg",
     "price": 1299,
     "description": "multi purpose storage boxes for organizing home items",
     "category": "home & kitchen",
@@ -281,7 +281,7 @@
   },
   {
     "productName": "vacuum cleaner handheld compact",
-    "productImage": "img/vacuum-cleaner.jpg",
+    "productImage": "/img/vacuum-cleaner.jpg",
     "price": 3499,
     "description": "compact handheld vacuum cleaner for quick cleaning",
     "category": "home & kitchen",
@@ -290,7 +290,7 @@
 
   {
     "productName": "fantasy adventure novel series",
-    "productImage": "img/novels.jpg",
+    "productImage": "/img/novels.jpg",
     "price": 899,
     "description": "epic fantasy series filled with adventure and magic",
     "category": "books",
@@ -298,7 +298,7 @@
   },
   {
     "productName": "business strategy guide book",
-    "productImage": "img/strategy-book2.jpg",
+    "productImage": "/img/strategy-book2.jpg",
     "price": 699,
     "description": "learn modern business strategies and growth techniques",
     "category": "books",
@@ -306,7 +306,7 @@
   },
   {
     "productName": "programming javascript advanced guide",
-    "productImage": "img/js-book.jpg",
+    "productImage": "/img/js-book.jpg",
     "price": 999,
     "description": "deep dive into advanced javascript concepts and patterns",
     "category": "books",
@@ -315,7 +315,7 @@
 
   {
     "productName": "face serum vitamin c glow",
-    "productImage": "img/serum.jpg",
+    "productImage": "/img/serum.jpg",
     "price": 799,
     "description": "vitamin c serum for glowing and radiant skin",
     "category": "beauty & personal care",
@@ -323,7 +323,7 @@
   },
   {
     "productName": "body lotion moisturizing daily",
-    "productImage": "img/body-lotion.jpg",
+    "productImage": "/img/body-lotion.jpg",
     "price": 599,
     "description": "daily moisturizing lotion for soft and smooth skin",
     "category": "beauty & personal care",
@@ -332,7 +332,7 @@
 
   {
     "productName": "treadmill foldable home use",
-    "productImage": "img/treadmill.jpg",
+    "productImage": "/img/treadmill.jpg",
     "price": 24999,
     "description": "foldable treadmill ideal for home workouts",
     "category": "sports & outdoors",
@@ -340,7 +340,7 @@
   },
   {
     "productName": "cricket bat english willow",
-    "productImage": "img/bat.jpg",
+    "productImage": "/img/bat.jpg",
     "price": 3499,
     "description": "high quality cricket bat for professional play",
     "category": "sports & outdoors",
@@ -348,7 +348,7 @@
   },
   {
     "productName": "football size 5 durable",
-    "productImage": "img/football.jpg",
+    "productImage": "/img/football.jpg",
     "price": 799,
     "description": "durable football suitable for outdoor matches",
     "category": "sports & outdoors",
@@ -357,7 +357,7 @@
 
   {
     "productName": "travel backpack large capacity",
-    "productImage": "img/backpack.jpg",
+    "productImage": "/img/backpack.jpg",
     "price": 1999,
     "description": "spacious travel backpack with multiple compartments",
     "category": "other",
@@ -365,7 +365,7 @@
   },
   {
     "productName": "office chair ergonomic comfort",
-    "productImage": "img/officeChair.jpg",
+    "productImage": "/img/officeChair.jpg",
     "price": 5999,
     "description": "ergonomic chair designed for long working hours",
     "category": "other",
