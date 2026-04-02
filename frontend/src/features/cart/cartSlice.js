@@ -31,19 +31,17 @@ const cartSlice = createSlice({
             })
             .addCase(addItemInCart.fulfilled, (state, action) => {
                 state.loading = false;
+
                 const newItem = action.payload.cartProduct;
 
-                // If item already exisits
                 const existingIndex = state.cartItems.findIndex(
-                    item => item.product._id === newItem.product._id
+                    item => item.productId === newItem.productId
                 );
 
                 if (existingIndex !== -1) {
-                    // Updating existing item
                     state.cartItems[existingIndex] = newItem;
                 } else {
-                    // Add new item
-                    state.cartItems.push(newItem)
+                    state.cartItems.push(newItem);
                 }
 
                 state.successMessage = action.payload.message;
@@ -109,7 +107,7 @@ const cartSlice = createSlice({
 
                     if (index !== -1) {
                         state.cartItems[index] = {
-                            ...state.cartItems[index],  
+                            ...state.cartItems[index],
                             quantity: cartProduct.quantity,
                             itemTotal: cartProduct.itemTotal || (cartProduct.quantity * state.cartItems[index].product.price),
                             _id: cartProduct._id,
